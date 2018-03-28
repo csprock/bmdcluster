@@ -12,15 +12,12 @@ The cluster assignments of the data and features are encoded in indicator matric
 
 The `BMD ` class contains methods for running the BMD algorithm. The algorithm is initialized upon the instantiation of a `BMD` object, whose parameters determine the number of data and feature clusters to find, the clustering method and initialization settings.
 
-There are four required arguments.
+There are four required arguments:
 
-The `data clusters` argument sets the number of clusters the data is to be grouped into.
-
-The `method` argument determines which variant of the BMD algorithm to use. The options are "block_diagonal" and "general".
-
-The `B_ident` argument is a logical specifying whether or not to initialize the feature cluster indicator matrix to the identity. This is equivalent to placing each feature in its own cluster at the start of the algorithm. If set to `False`, then the number of feature clusters must be set using by supplying the keyword argument `feature_clusters`.
-
-The `use_bootstrap` argument is a logical specifying whether or not to bootstrap a subset of the data to use for initializing the data clusters. Default is `False`. If set to `True` then the keyword argument `b` must be set to the number of points to use for the bootstrapped sample.
+* The `data clusters` argument sets the number of clusters the data is to be grouped into.
+* The `method` argument determines which variant of the BMD algorithm to use. The options are "block_diagonal" and "general".
+* The `B_ident` argument is a logical specifying whether or not to initialize the feature cluster indicator matrix to the identity. This is equivalent to placing each feature in its own cluster at the start of the algorithm. If set to `False`, then the number of feature clusters must be set using by supplying the keyword argument `feature_clusters`.
+* The `use_bootstrap` argument is a logical specifying whether or not to bootstrap a subset of the data to use for initializing the data clusters. Default is `False`. If set to `True` then the keyword argument `b` must be set to the number of points to use for the bootstrapped sample.
 
 It is also possible to specify the ratio of points to randomly initialize when `use_bootstrap` is set to `False`. The `init_ratio` is an optional keyword argument that specifies the faction of the data to randomly initialize. When this argument is set, only a random subset of the data is randomly assigned to clusters while the remaining points remain unassigned.
 
@@ -51,21 +48,21 @@ model = BMD(data_clusters = 2, method = 'general', B_ident = True, use_bootstrap
 
 <h3> Fitting the Model </h3>
 
-Once a `BMD` object has been instantiated, fitting the model is simply a matter of passing a data matrix (a numpy array) to the `fit` method: `BMD.fit(W)`. The array must be such that the data is contained in the rows and the features in columns.
+Once a `BMD` object has been instantiated, fitting the model is simply a matter of passing a data matrix (a numpy array) to the `fit` method: `model.fit(W)`. The array must be such that the data is contained in the rows and the features in columns.
 
 There are two optional arguments to the `fit` method. `verbose` is a logical flag to print the progress of the algorithm which by default is set to `0`. The second optional argument `return_results` is a logical flag that returns the results of the BMD algorithm. If set to `True`, three objects are returned, the final value of the cost function, the data cluster indicator matrix A and the feature cluster indicator matrix B.
 
 ````
-cost, A, B = BMD.fit(W, return_results = True)
+cost, A, B = model.fit(W, return_results = True)
 ````
 Once the model has been fit, the `get_indices` method can be used to return the indices of the points or features contained in a specified cluster (numbered starting from 0). For example, to get the indices of the data points contained in the second data cluster use:
 
 ````
-BMD.get_indices(1, 'data')
+model.get_indices(1, 'data')
 ````
 To get the indices of the features in the first feature cluster, use
 ````
-BMD.get_indices(0, 'features')
+model.get_indices(0, 'features')
 ````
 Note: unless you are using the block diagonal variant of the algorithm, there is no relationship between the data clusters and the feature clusters. That is, data cluster 1 and feature cluster 1 do not refer to the same cluster.
 
