@@ -1,4 +1,4 @@
-
+import numpy as np
 from .clusterInitializers import initializeA, initializeB
 from .bootstrapInitializer import initializeBootstrappedClusters
 

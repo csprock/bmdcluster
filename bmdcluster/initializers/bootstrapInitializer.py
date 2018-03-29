@@ -1,9 +1,4 @@
 import numpy as np
-from .clusterInitializers import initializeA, initializeB
-
-from optimizers.blockdiagonalBMD import run_bd_BMD
-from optimizers.generalBMD import run_BMD
-
 
 class MissingKeywordArgument(Exception):
     """ Exception raised for missing required kwargs """

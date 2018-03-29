@@ -1,9 +1,10 @@
-import pandas as pd
-import numpy as np
 
+
+
+import pandas as pd
 
 # import test data
-zoo_data = pd.read_csv('C:/Users/csprock/Documents/Projects/BMD/tests/zoo_data.csv')
+zoo_data = pd.read_csv('C:/Users/csprock/Documents/Projects/bmdcluster/tests/zoo_data.csv')
 class_labels = zoo_data.type.values - 1
 W = zoo_data.iloc[:,1:22].values
 
