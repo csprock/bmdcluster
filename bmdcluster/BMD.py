@@ -1,11 +1,18 @@
 """
-This file contains the main wrapper class for using the BMDcluster package.
+This file contains the main wrapper class for using the bmdcluster package.
 """
 
 import numpy as np
-from .optimizers.blockdiagonalBMD import run_bd_BMD
-from .optimizers.generalBMD import run_BMD
-from .initializers.primaryInitializer import initializeClusters
+
+if __name__ == "__main__":
+   from optimizers.blockdiagonalBMD import run_bd_BMD
+   from optimizers.generalBMD import run_BMD
+   from initializers.primaryInitializer import initializeClusters 
+else:
+    from .optimizers.blockdiagonalBMD import run_bd_BMD
+    from .optimizers.generalBMD import run_BMD
+    from .initializers.primaryInitializer import initializeClusters
+
 
 class BMD:
     """ Wrapper class for BMD clustering methods. """
