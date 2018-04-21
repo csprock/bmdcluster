@@ -1,6 +1,9 @@
 
 
 
+
+import bmdcluster
+
 import pandas as pd
 
 # import test data
