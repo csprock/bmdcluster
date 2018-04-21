@@ -11,7 +11,7 @@ class TestDataset(unittest.TestCase):
         
         self.W = np.loadtxt(open('./test_set_2.csv', 'r'), delimiter = ',')
         
-        self. A , self.B = np.zeros((6,3)), np.zeros((6,3))
+        self.A , self.B = np.zeros((6,3)), np.zeros((6,3))
         for i in range(0,3): self.A[2*i, i], self.B[2*i,i] = 1, 1
         #self.A[0,0], self.A[2,1], self.A[4,2] = 1,1,1
         
@@ -29,17 +29,28 @@ class TestDataset(unittest.TestCase):
     
     
     def test_updateX(self):
-        
-        self.assertTrue(np.array_equal(self.expected_X, _updateX(self.A, self.B, self.W)))
+        self.assertTrue(np.array_equal(self.expected_X, 
+                                       _updateX(self.A, self.B, self.W)))
         
     def test_updateA(self):
-        
-        self.assertTrue(np.array_equal(self.expected_AB, _updateA(self.A,self.B,self.expected_X,self.W)))
+        self.assertTrue(np.array_equal(self.expected_AB, 
+                                       _updateA(self.A, self.B, self.expected_X, self.W)))
         
     def test_updateB(self):
-
-        self.assertTrue(np.array_equal(self.expected_AB, _updateB(self.A, self.B, self.expected_X, self.W)))
+        self.assertTrue(np.array_equal(self.expected_AB, 
+                                       _updateB(self.A, self.B, self.expected_X, self.W)))
         
-
+    def test_run_BMD(self):
+        
+        _, A, B = run_BMD(self.A, self.B, self.W, verbose = 0)
+        
+        with self.subTest():
+            self.assertTrue(np.array_equal(A, self.expected_AB))
+            
+        with self.subTest():
+            self.assertTrue(np.array_equal(B, self.expected_AB))
+        
+    
+    
 if __name__ == '__main__':
     unittest.main()
