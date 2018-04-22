@@ -12,7 +12,7 @@ class MissingKeywordArgument(Exception):
 ###############################################################################
 
 
-def bootstrap_data(N, b, **kwargs):
+def bootstrap_data(N, **kwargs):
     """
     This function computes sets of indices used to create a bootstrapped sample of data.
     A subset of size b is chosen randomly from a set of indices ranging from 0 to N-1. This 
@@ -21,8 +21,11 @@ def bootstrap_data(N, b, **kwargs):
     Parameters
     ----------
     N: size of data set
-    b: size of bootstrapped subset
 
+    kwargs
+    ------
+    b: size of subset used to bootstrap is passed to bootstrap_data()
+    seed: seed for numpy's random number generator
     
     Returns
     -------
@@ -32,13 +35,15 @@ def bootstrap_data(N, b, **kwargs):
     Raises
     ------
     AssertionError: raises assertion error if b > N
+    MissingKeywordArgument: if 'b' is missing, raises exception
     
     """
-    assert b <= N
+    if 'b' not in kwargs.keys(): raise MissingKeywordArgument("Missing required kwarg '%s'" % 'b')
+    assert kwargs['b'] <= N
     
     if 'seed' in kwargs.keys(): np.random.seed(kwargs['seed'])
     
-    x_samp = np.random.choice(range(N), size = b)
+    x_samp = np.random.choice(range(N), size = kwargs['b'], replace = False)
     x_rep = np.random.choice(x_samp, size = N, replace = True)
     
     return x_samp, x_rep
@@ -50,8 +55,7 @@ def assign_bootstrapped_clusters(A_boot, x_rep, x_samp):
     Parameters
     ----------
     A_boot: cluster indicator matrix
-    x_rep: array containing indices of bootstrapped replicates. Contains as many unique
-           integers as the length of x_samp
+    x_rep: array containing indices of bootstrapped replicates. 
     x_samp: array containing indices of the subset used to create bootstrapped replicates
     
     
@@ -112,11 +116,9 @@ def initializeBootstrappedClusters(W, method, data_clusters, B_ident, **kwargs):
     
     assert method in ['general','block_diagonal']
     
-    if 'b' not in kwargs.keys(): raise MissingKeywordArgument("Missing required kwarg '%s'" % 'b')
-    
-    
+
     n, m = W.shape
-    x_samp, x_rep = bootstrap_data(n, b = kwargs['b'])
+    x_samp, x_rep = bootstrap_data(n, **kwargs)
     
     if method == 'block_diagonal':
         A_init = initializeA(n, data_clusters, **kwargs)
