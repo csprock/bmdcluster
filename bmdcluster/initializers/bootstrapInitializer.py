@@ -1,14 +1,18 @@
 import numpy as np
 
+from .clusterInitializers import initializeA, initializeB
+from ..optimizers.blockdiagonalBMD import run_bd_BMD
+from ..optimizers.generalBMD import run_BMD
+
 class MissingKeywordArgument(Exception):
     """ Exception raised for missing required kwargs """
-
+    
 ###############################################################################
 #####             bootstrapping cluster functions                        ######
 ###############################################################################
 
 
-def bootstrap_data(N, b):
+def bootstrap_data(N, b, **kwargs):
     """
     This function computes sets of indices used to create a bootstrapped sample of data.
     A subset of size b is chosen randomly from a set of indices ranging from 0 to N-1. This 
@@ -31,6 +35,8 @@ def bootstrap_data(N, b):
     
     """
     assert b <= N
+    
+    if 'seed' in kwargs.keys(): np.random.seed(kwargs['seed'])
     
     x_samp = np.random.choice(range(N), size = b)
     x_rep = np.random.choice(x_samp, size = N, replace = True)

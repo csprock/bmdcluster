@@ -14,26 +14,26 @@ W = zoo_data.iloc[:,1:22].values
 
 n, m = W.shape
 
-### initialize_feature_clusters() ###
-
-# testing for correct number of clusters (should = m)
-B_test = initialize_feature_clusters(m, B_ident = True)
-B_test.sum()
-
-# test missing keyword argument 
-initialize_feature_clusters(m, B_ident = False)
-
-# test feature_clusters > m
-initialize_feature_clusters(m, B_ident = False, feature_clusters = m + 1)
-
-### initialize_data_clusters() (without bootstrapping features) ###
-
-# testing for correct number of assignments (should = n)
-A_test = initialize_data_clusters(n, data_clusters = 3)
-A_test.sum()
-
-# test data_clusters > n
-initialize_data_clusters(n, data_clusters = n + 1)
+#### initialize_feature_clusters() ###
+#
+## testing for correct number of clusters (should = m)
+#B_test = initialize_feature_clusters(m, B_ident = True)
+#B_test.sum()
+#
+## test missing keyword argument 
+#initialize_feature_clusters(m, B_ident = False)
+#
+## test feature_clusters > m
+#initialize_feature_clusters(m, B_ident = False, feature_clusters = m + 1)
+#
+#### initialize_data_clusters() (without bootstrapping features) ###
+#
+## testing for correct number of assignments (should = n)
+#A_test = initialize_data_clusters(n, data_clusters = 3)
+#A_test.sum()
+#
+## test data_clusters > n
+#initialize_data_clusters(n, data_clusters = n + 1)
 
 ### testing bootstrapping functions ###
 

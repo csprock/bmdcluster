@@ -2,7 +2,6 @@ import numpy as np
 
 class MissingKeywordArgument(Exception):
     """ Exception raised for missing required kwargs """
-
 ###############################################################################
 ###########                 cluster initializers                  #############
 ###############################################################################
@@ -43,7 +42,7 @@ def initializeB(m, B_ident, **kwargs):
     else:
         
         if 'feature_clusters' not in kwargs.keys(): raise MissingKeywordArgument("Missing required keyword '%s'" % 'feature_clusters')
-        assert kwargs['feature_clusters'] <= m
+        assert 1 < kwargs['feature_clusters'] <= m
         
         C = kwargs['feature_clusters']
         
@@ -90,6 +89,8 @@ def initializeA(n, data_clusters, **kwargs):
 
     assert 1 < data_clusters < n
 
+
+    
     A_init = np.zeros((n, data_clusters))
     
     if 'bootstrap' in kwargs.keys(): 
@@ -103,5 +104,7 @@ def initializeA(n, data_clusters, **kwargs):
                 A_init[j, np.random.randint(data_clusters)] = 1
         else:
             for j in range(n): A_init[j, np.random.randint(data_clusters)] = 1
-                
+                    
+
     return A_init
+    

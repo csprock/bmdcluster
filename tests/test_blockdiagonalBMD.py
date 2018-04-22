@@ -1,8 +1,15 @@
-import numpy as np
 
 import unittest
+import os, sys
+import numpy as np
 
-#from bmdcluster.optimizers.blockdiagonalBMD import run_bd_BMD
+if __name__ == '__main__':
+    
+    mypath = os.path.dirname(os.path.realpath('__file__'))
+    sys.path.append(os.path.join(mypath, os.pardir))
+    
+    from bmdcluster.optimizers.blockdiagonalBMD import run_bd_BMD, _bd_updateB, _bd_updateA, _d_ik, _Y
+
 
 
 class TestBDDataset(unittest.TestCase):
@@ -24,6 +31,7 @@ class TestBDDataset(unittest.TestCase):
                                 [False, False]])  # outlier
         
         
+    
         self.expected_A = np.array([[1,0],
                                     [1,0],
                                     [1,0],
@@ -57,15 +65,13 @@ class TestBDDataset(unittest.TestCase):
             
         
     def test_d_ik(self):
-        
         for i in range(0, self.A.shape[0]):
-            
             with self.subTest(i = i):
                 self.assertEqual(_d_ik(i, self.W, self.step_B), self.expected_assignment[i])
                 
 
     def test_bd_updateB(self):
-            self.assertTrue(np.array_equal(_bd_updateB(self.A, self.W), self.step_B))
+        self.assertTrue(np.array_equal(_bd_updateB(self.A, self.W), self.step_B))
             
 
     def test_bd_updateA(self):

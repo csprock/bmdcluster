@@ -24,7 +24,7 @@ def _d_ik(i, W, B):
     between point i and data cluster k is computed by summing over the element-wise differences
     between the i-th row and k-th row of W and B, respectively: 
     
-        d[i,k] = SUM_{j in features} (W[i,j] - B[k,j])^2
+        d[i,k] = SUM_{j in features} (W[i,j] - B[k,j])^2j
     
     
     Parameters
@@ -82,7 +82,10 @@ def _bd_updateA(A,B,W):
     return A_new
 
 
-def _bd_updateB(A,W):
+
+
+
+def _Y(A, W):
     """
     The feature cluster matrix B is updated using formula 11 from Li (2005). This is done
     by computing a 'probability matrix' Y where the kj-th entry represents the probability
@@ -96,6 +99,26 @@ def _bd_updateB(A,W):
     
         y[i,j] = (1/n_k)*SUM_{i in data} a[i,k]*w[i,j] = (1/n_k)*( a[:,k]'w[:,j] )
         n_k = number of points in cluster k
+    
+    """
+    n_k = A.sum(axis = 0)                 # Compute number of points in each cluster.
+    n_k[np.where(n_k == 0)[0]] = np.inf   # Set zero entries to inf to zero out reciprocal. 
+    r = 1 / n_k                           # Compute reciprocal. 
+    r.shape = (A.shape[1],1)              # Reshape for broadcasting. 
+
+    
+    return np.dot(A.T, W)*r                  # Compute Y matrix as dot product matrix of rows of A and W. 
+
+
+
+def _bd_updateB(A,W):
+    """
+    Updated feature cluster matrix B. Applies the _Y() and B set to the matrix the same shape
+    as Y but with 1's in the entries corresponding to where Y[>=0.5] and 0's elsewhere.
+    
+    Features that are associated with all clusters are 'outliers' (have a row whose entries >=0.5 in Y)
+    Following Li and Zhu are not assigned to any clusters by setting all entries in B associated with those
+    features to 0. 
         
     
     Parameters
@@ -108,15 +131,25 @@ def _bd_updateB(A,W):
     B_new: updated feature cluster indicator matrix
     
     """
-    n_k = A.sum(axis = 0)                 # Compute number of points in each cluster.
-    n_k[np.where(n_k == 0)[0]] = np.inf   # Set zero entries to inf to zero out reciprocal. 
-    r = 1 / n_k                           # Compute reciprocal. 
-    r.shape = (A.shape[1],1)              # Reshape for broadcasting. 
-
     
-    Y = np.dot(A.T, W)*r                  # Compute Y matrix as dot product matrix of rows of A and W. 
+    Y = _Y(A, W)
     B_new = np.greater_equal(Y, 0.5).T    # Update B matrix. 
-
+    
+    #### setting all True rows to False ####
+    # if feature has similar associate to all clusters, is an outlier (see Li and Zhu)
+    # will have a row of all True by the np.greater_equal() function, reverse to make row of False
+    
+    def is_outlier(d):
+        
+        if np.array_equal(d, np.array([True]*len(d))):
+            return np.array([False]*len(d))
+        else:
+            return d
+    
+    B_new = np.apply_along_axis(is_outlier, axis = 1, arr = B_new)
+    
+    
+    
     return B_new
     
 

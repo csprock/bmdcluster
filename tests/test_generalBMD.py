@@ -2,7 +2,14 @@
 import numpy as np
 import unittest
 
-
+if __name__ == '__main__':
+    
+    mypath = os.path.dirname(os.path.realpath('__file__'))
+    sys.path.append(os.path.join(mypath, os.pardir))
+    
+    from bmdcluster.optimizers.generalBMD import run_BMD, _updateB, _updateA, _updateX
+    
+    
 
 class TestDataset(unittest.TestCase):
     
