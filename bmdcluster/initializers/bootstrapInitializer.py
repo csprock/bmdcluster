@@ -114,7 +114,7 @@ def initializeBootstrappedClusters(W, method, data_clusters, B_ident, **kwargs):
     
     """
     
-    assert method in ['general','block_diagonal']
+    #assert method in ['general','block_diagonal']
     
 
     n, m = W.shape

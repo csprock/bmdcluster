@@ -44,6 +44,8 @@ def initializeB(m, B_ident, **kwargs):
         if 'feature_clusters' not in kwargs.keys(): raise MissingKeywordArgument("Missing required keyword '%s'" % 'feature_clusters')
         assert 1 < kwargs['feature_clusters'] <= m
         
+        if 'seed' in kwargs.keys(): np.random.seed(kwargs['seed'])
+        
         C = kwargs['feature_clusters']
         
         B_init = np.zeros((m, C))
@@ -97,6 +99,9 @@ def initializeA(n, data_clusters, **kwargs):
         # Iterate through list of tuples, placing a 1 the corresponding position in A_init. 
         for u in kwargs['bootstrap']: A_init[u[0], u[1]] = 1
     else:
+        
+        if 'seed' in kwargs.keys(): np.random.seed(kwargs['seed'])
+        
         if 'init_ratio' in kwargs.keys():
             assert 0 < kwargs['init_ratio'] <= 1
             # Select a random fraction of points of size init_ratio. 

@@ -11,15 +11,15 @@ def initializeClusters(W, method, data_clusters, B_ident = False, use_bootstrap 
     if method == 'block_diagonal':
         if use_bootstrap:
             boot = initializeBootstrappedClusters(W = W, method = method, data_clusters = data_clusters, B_ident = B_ident, **kwargs)
-            A_init = initializeA(n, bootstrap = boot, **kwargs)
+            A_init = initializeA(n, data_clusters, bootstrap = boot, **kwargs)
         else:
             A_init = initializeA(n, data_clusters, **kwargs)
-        return A_init
+        return A_init, None
     else:
 
         if use_bootstrap:
             boot = initializeBootstrappedClusters(W = W, method = method, data_clusters = data_clusters, B_ident = B_ident, **kwargs)
-            A_init = initializeA(n, data_clusters = data_clusters, bootstrap = boot,**kwargs)
+            A_init = initializeA(n, data_clusters, bootstrap = boot, **kwargs)
             B_init = initializeB(m, B_ident = B_ident, **kwargs)
             
         else:

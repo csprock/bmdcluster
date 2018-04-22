@@ -64,6 +64,9 @@ class BMD:
         if 'init_ratio' in kwargs:
             self.keywords['init_ratio'] = kwargs['init_ratio']
             
+        if 'seed' in kwargs:
+            self.keywords['seed'] = kwargs['seed']
+            
         
     
     def fit(self, W, verbose = 0, return_results = False):

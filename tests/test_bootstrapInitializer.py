@@ -9,7 +9,6 @@ if __name__ == '__main__':
     sys.path.append(os.path.join(mypath, os.pardir))
     
     from bmdcluster.initializers.bootstrapInitializer import bootstrap_data, assign_bootstrapped_clusters, initializeBootstrappedClusters, MissingKeywordArgument
-    from bmdcluster.initializers.clusterInitializers import initializeA
 
 
 
@@ -25,18 +24,18 @@ class TestboostrapInitializer(unittest.TestCase):
     def test_BootstrappedClusters_assertions(self):
         
         
-        with self.subTest('Test clustering method assertion'):
-            with self.assertRaises(AssertionError):
-                initializeBootstrappedClusters(W = self.W, data_clusters = self.K, method = 'wrong', B_ident = True)
+        #with self.subTest('Test clustering method assertion'):
+        #    with self.assertRaises(AssertionError):
+        #        initializeBootstrappedClusters(W = self.W, data_clusters = self.K, method = 'wrong', B_ident = True)
     
        
-        with self.subTest('Test output type and length using general'):
+        with self.subTest('Test output type and length using general method'):
             output = initializeBootstrappedClusters(W = self.W, data_clusters = self.K, method = 'general', B_ident = True, b = 5, seed = self.seed)
             self.assertTrue(isinstance(output, list))
             self.assertEqual(len(output), 5)
             
             
-        with self.subTest('Test output type and length using block diagonal'):
+        with self.subTest('Test output type and length using block diagonal method'):
             output = initializeBootstrappedClusters(W = self.W, data_clusters = self.K, method = 'block_diagonal', B_ident = True, b = 5, seed = self.seed)
             self.assertTrue(isinstance(output, list))
             self.assertEqual(len(output), 5)
@@ -77,6 +76,8 @@ class TestboostrapInitializer(unittest.TestCase):
 
     def test_assign_bootstrapped_clusters(self):
         
+        # Check that output of bootstrapped_clusters is the same as that of known example.
+        
         x_samp, x_rep = bootstrap_data(15, b = 5, seed = self.seed)
         actual_clusters = [1,2,0,0,1]
         expected_assignments = list(zip(list(x_samp), actual_clusters))
@@ -98,25 +99,18 @@ if __name__ == '__main__':
     unittest.main()
 
 #W = np.loadtxt(open('./test_set_3.csv', 'r'), delimiter = ',')
-
-
+#
+#
 #x_samp, x_rep = bootstrap_data(15,5, seed = 123)
-#
 #expected_assignments = list(zip(list(x_samp), [1,2,0,0,1]))
-#
 #actual_clusters = [1,2,0,0,1]
-#
 #A_boot = np.zeros((15,3))
-#
 #for k, i in enumerate(x_rep):
-#    
 #    for j in expected_assignments:
-#        
 #        if j[0] == i:
-#            
 #            A_boot[k,j[1]] = 1
-#
-#
+
+
 #
 #W[x_rep,:]
 #c = [2,1,1,2,0,1,1,1,1,2,0,0,1,0,1]
