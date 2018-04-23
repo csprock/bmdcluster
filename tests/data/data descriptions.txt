@@ -1,0 +1,11 @@
+test_set_1.csv: contrived test set with some "noise" added. 6 rows, 3 features. 3 data clusters, 3 feature clusters.
+
+test_set_2.csv: non-block diagonal data. 6 rows, 6 features. 3 data clusters, 3 feature clusters.
+
+test_set_3.csv: block diagonal data. 15 rows, 6 features. 3 feature clusters, 3 data clusters
+
+test_set_4.csv: same pattern as test_set_2 with same dimensions as test_set_3
+
+li_zhu.csv: example data from section 2.4 in Li & Zhu (2005)
+
+zoo.csv: zoo dataset used in Li (2005) in section 6.2. Modified so "leg" attribute split into binary indicators following Li. 

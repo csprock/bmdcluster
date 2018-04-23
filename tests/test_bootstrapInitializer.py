@@ -16,7 +16,7 @@ class TestboostrapInitializer(unittest.TestCase):
     
     def setUp(self):
         
-        self.W = np.loadtxt(open('./test_set_3.csv', 'r'), delimiter = ',')
+        self.W = np.loadtxt(open('./data/test_set_3.csv', 'r'), delimiter = ',')
         self.K = 3
         self.C = 3
         self.seed = 123

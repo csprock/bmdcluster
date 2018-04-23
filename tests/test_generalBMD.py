@@ -1,6 +1,7 @@
 
 import numpy as np
 import unittest
+import os, sys
 
 if __name__ == '__main__':
     
@@ -16,7 +17,7 @@ class TestDataset(unittest.TestCase):
     
     def setUp(self):
         
-        self.W = np.loadtxt(open('./test_set_2.csv', 'r'), delimiter = ',')
+        self.W = np.loadtxt(open('./data/test_set_2.csv', 'r'), delimiter = ',')
         
         self.A , self.B = np.zeros((6,3)), np.zeros((6,3))
         for i in range(0,3): self.A[2*i, i], self.B[2*i,i] = 1, 1

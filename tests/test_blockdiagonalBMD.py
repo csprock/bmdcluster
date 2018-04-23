@@ -18,7 +18,7 @@ class TestBDDataset(unittest.TestCase):
         
         # Uses the data and initialization setup from example in section 2.4 of Li & Zhu.
         
-        self.W = np.loadtxt(open('./BMD_test.csv', 'r'), delimiter = ',', skiprows = 1)
+        self.W = np.loadtxt(open('./data/li_zhu.csv', 'r'), delimiter = ',', skiprows = 1)
         self.A = np.zeros((6,2))
         self.A[1,0], self.A[4,1] = 1,1
         
