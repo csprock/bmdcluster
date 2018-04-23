@@ -7,7 +7,7 @@ if __name__ == '__main__':
     mypath = os.path.dirname(os.path.realpath('__file__'))
     sys.path.append(os.path.join(mypath, os.pardir))
     
-    import bmdcluster
+import bmdcluster
     
     
 
@@ -16,7 +16,7 @@ class TestBMD_bd(unittest.TestCase):
     
     def setUp(self):
         
-        self.W = np.loadtxt(open('./test_set_3.csv','r'), delimiter = ',')
+        self.W = np.loadtxt(open('./data/test_set_3.csv','r'), delimiter = ',')
         self.C, self.K = 3, 3
         self.seed = 123
         
@@ -70,7 +70,7 @@ class TestBMD_general(unittest.TestCase):
     
     def setUp(self):
         
-        self.W = np.loadtxt(open('./test_set_4.csv', 'r'), delimiter = ',')
+        self.W = np.loadtxt(open('./data/test_set_4.csv', 'r'), delimiter = ',')
         self.C = 3
         self.seed = 1234
         

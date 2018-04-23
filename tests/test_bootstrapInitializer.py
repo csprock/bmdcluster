@@ -8,8 +8,7 @@ if __name__ == '__main__':
     mypath = os.path.dirname(os.path.realpath('__file__'))
     sys.path.append(os.path.join(mypath, os.pardir))
     
-    from bmdcluster.initializers.bootstrapInitializer import bootstrap_data, assign_bootstrapped_clusters, initializeBootstrappedClusters, MissingKeywordArgument
-
+from bmdcluster.initializers.bootstrapInitializer import bootstrap_data, assign_bootstrapped_clusters, initializeBootstrappedClusters
 
 
 class TestboostrapInitializer(unittest.TestCase):
@@ -21,7 +20,7 @@ class TestboostrapInitializer(unittest.TestCase):
         self.C = 3
         self.seed = 123
     
-    def test_BootstrappedClusters_assertions(self):
+    def test_intializeBootstrappedClusters_assertions(self):
         
         
         #with self.subTest('Test clustering method assertion'):
@@ -41,7 +40,7 @@ class TestboostrapInitializer(unittest.TestCase):
             self.assertEqual(len(output), 5)
             
     
-    def test_bootstrap_data(self):
+    def test_bootstrap_data_assertions(self):
         
         with self.subTest('Test input size assertion'):
             with self.assertRaises(AssertionError):
@@ -49,10 +48,12 @@ class TestboostrapInitializer(unittest.TestCase):
                 
             
         with self.subTest('Test bootstrap size assertion'):
-            with self.assertRaises(MissingKeywordArgument):
+            with self.assertRaises(KeyError):
                 bootstrap_data(N = 10)
-            
-            
+    
+    def test_bootstrap_data_outputs(self):
+        
+        
         with self.subTest('Test output sizes'):
             
             x_samp, x_rep = bootstrap_data(10, b = 5)
@@ -91,40 +92,8 @@ class TestboostrapInitializer(unittest.TestCase):
         self.assertEqual(expected_assignments, assign_bootstrapped_clusters(A_boot, x_rep, x_samp))
     
     
-    
-    
-    
+   
     
 if __name__ == '__main__':
     unittest.main()
 
-#W = np.loadtxt(open('./test_set_3.csv', 'r'), delimiter = ',')
-#
-#
-#x_samp, x_rep = bootstrap_data(15,5, seed = 123)
-#expected_assignments = list(zip(list(x_samp), [1,2,0,0,1]))
-#actual_clusters = [1,2,0,0,1]
-#A_boot = np.zeros((15,3))
-#for k, i in enumerate(x_rep):
-#    for j in expected_assignments:
-#        if j[0] == i:
-#            A_boot[k,j[1]] = 1
-
-
-#
-#W[x_rep,:]
-#c = [2,1,1,2,0,1,1,1,1,2,0,0,1,0,1]
-#
-#A_boot = np.zeros((15,3))
-#for i, j in enumerate(c):
-#    A_boot[i, j] = 1
-#
-#
-#t = assign_bootstrapped_clusters(A_boot, x_rep, x_samp)
-
-#
-#boot = initializeBootstrappedClusters(W, data_clusters = 3, method = 'block_diagonal', B_ident = False, feature_clusters = 3, b = 5)
-#
-#initializeA(15, 3, bootstrap = boot)
-#
-#bootstrap_data(15, 5, seed = 1)

@@ -1,7 +1,6 @@
 import numpy as np
 
-class MissingKeywordArgument(Exception):
-    """ Exception raised for missing required kwargs """
+
 ###############################################################################
 ###########                 cluster initializers                  #############
 ###############################################################################
@@ -41,7 +40,7 @@ def initializeB(m, B_ident, **kwargs):
         B_init = np.identity(m)
     else:
         
-        if 'feature_clusters' not in kwargs.keys(): raise MissingKeywordArgument("Missing required keyword '%s'" % 'feature_clusters')
+        if 'feature_clusters' not in kwargs.keys(): raise KeyError("Missing required keyword '%s'" % 'feature_clusters')
         assert 1 < kwargs['feature_clusters'] <= m
         
         if 'seed' in kwargs.keys(): np.random.seed(kwargs['seed'])

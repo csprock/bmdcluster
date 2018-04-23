@@ -8,20 +8,24 @@ if __name__ == '__main__':
     mypath = os.path.dirname(os.path.realpath('__file__'))
     sys.path.append(os.path.join(mypath, os.pardir))
     
-    from bmdcluster.optimizers.blockdiagonalBMD import run_bd_BMD, _bd_updateB, _bd_updateA, _d_ik, _Y
+
+from bmdcluster.optimizers.blockdiagonalBMD import run_bd_BMD, _bd_updateB, _bd_updateA, _d_ik, _Y
 
 
 
-class TestBDDataset(unittest.TestCase):
+class TestExampleDataset_BD(unittest.TestCase):
     
     def setUp(self):
         
         # Uses the data and initialization setup from example in section 2.4 of Li & Zhu.
         
         self.W = np.loadtxt(open('./data/li_zhu.csv', 'r'), delimiter = ',', skiprows = 1)
+        
+        # Initialize data matrix A
         self.A = np.zeros((6,2))
         self.A[1,0], self.A[4,1] = 1,1
         
+        # intermediate stage 
         self.step_B = np.array([[True, False],
                                 [True, False],
                                 [True, False],
@@ -80,7 +84,7 @@ class TestBDDataset(unittest.TestCase):
 
 
     
-class IdentityTests(unittest.TestCase):
+class IdentityTests_BD(unittest.TestCase):
     
     def setUp(self):
         self.I = np.identity(3)

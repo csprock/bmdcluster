@@ -4,15 +4,15 @@ import unittest
 import os, sys
 
 if __name__ == '__main__':
-    
     mypath = os.path.dirname(os.path.realpath('__file__'))
     sys.path.append(os.path.join(mypath, os.pardir))
     
-    from bmdcluster.optimizers.generalBMD import run_BMD, _updateB, _updateA, _updateX
+from bmdcluster.optimizers.generalBMD import run_BMD, _updateB, _updateA, _updateX
+
     
     
 
-class TestDataset(unittest.TestCase):
+class TestExampleDataset_General(unittest.TestCase):
     
     
     def setUp(self):
@@ -20,6 +20,7 @@ class TestDataset(unittest.TestCase):
         self.W = np.loadtxt(open('./data/test_set_2.csv', 'r'), delimiter = ',')
         
         self.A , self.B = np.zeros((6,3)), np.zeros((6,3))
+        
         for i in range(0,3): self.A[2*i, i], self.B[2*i,i] = 1, 1
         #self.A[0,0], self.A[2,1], self.A[4,2] = 1,1,1
         

@@ -4,8 +4,6 @@ from .clusterInitializers import initializeA, initializeB
 from ..optimizers.blockdiagonalBMD import run_bd_BMD
 from ..optimizers.generalBMD import run_BMD
 
-class MissingKeywordArgument(Exception):
-    """ Exception raised for missing required kwargs """
     
 ###############################################################################
 #####             bootstrapping cluster functions                        ######
@@ -38,7 +36,7 @@ def bootstrap_data(N, **kwargs):
     MissingKeywordArgument: if 'b' is missing, raises exception
     
     """
-    if 'b' not in kwargs.keys(): raise MissingKeywordArgument("Missing required kwarg '%s'" % 'b')
+    if 'b' not in kwargs.keys(): raise KeyError("Missing required kwarg '%s'" % 'b')
     assert kwargs['b'] <= N
     
     if 'seed' in kwargs.keys(): np.random.seed(kwargs['seed'])
