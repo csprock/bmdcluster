@@ -6,15 +6,18 @@ This packages contains an implementation of the Binary Matrix Decomposition (BMD
 
 Two variants of the BMD algorithm are implemented. The first method assumes the data matrix is block-diagonal, i.e. that is each group of points is associated with a group of features and vice versa. The second method is a general method with no restrictions on the matrix structure. See [1] for details.
 
-The cluster assignments of the data and features are encoded in indicator matrices that are randomly initialized at the start of the clustering procedure. [2] recommends bootstrapping a small subset of the data to get initial data cluster assignments. These are then used to seed the data indicator matrix at the beginning of the clustering procedure when used on the full dataset. ````bmdcluster```` supports this method of initializing the data clusters as well as random initialization. Users also have the option initialize the feature cluster indicator matrix to the identity matrix, which corresponds to putting each feature in its own cluster at initialization.
+The cluster assignments of the data and features are encoded in indicator matrices that are randomly initialized at the start of the clustering procedure. [2] recommends bootstrapping a small subset of the data to get initial data cluster assignments. These are then used to seed the data indicator matrix at the beginning of the clustering procedure when used on the full dataset. `bmdcluster` supports this method of initializing the data clusters as well as random initialization. Users also have the option initialize the feature cluster indicator matrix to the identity matrix, which corresponds to putting each feature in its own cluster at initialization.
 
 <h2> Installation </h2>
-The ````bmdcluster```` package can be installed using pip by calling
- ````pip install bmdcluster````
+
+The `bmdcluster` package can be installed using pip by calling
+ ````
+ pip install bmdcluster
+ ````
 
 <h2> Usage </h2>
 
-The main point of entry to the ````bmdcluster```` package is the `BMD` class, whose usage is modeled on that of sklearn's models. The BMD model is instantiated with a set of parameters before the .fit() method is called on the data to be clustered. The BMD model can be used by importing the `BMD` model object from the `bmdcluster` package as follows:
+The main point of entry to the `bmdcluster` package is the `BMD` class, whose usage is modeled on that of sklearn's models. The BMD model is instantiated with a set of parameters before the .fit() method is called on the data to be clustered. The BMD model can be used by importing the `BMD` model object from the `bmdcluster` package as follows:
 
 ````
 from bmdcluster import BMD

@@ -7,7 +7,7 @@ def readme():
 
 setup(
     name = 'bmdcluster',
-    version = '0.0.1.dev1',
+    version = '0.0.1.beta',
     description = 'BMD algorithm for clustering binary data',
     url = 'https://github.com/csprock/bmdcluster',
     author = 'Carson Sprock',
@@ -19,7 +19,7 @@ setup(
     install_requires = ['numpy>=1.14'],
     packages = find_packages(exclude = ['tests']),
     classifiers = [
-    'Development Status :: 2 - Pre-Alpha',
+    'Development Status :: 4 - Beta',
     'Intended Audience :: Science/Research',
     'License :: OSI Approved :: MIT License',
     'Programming Language :: Python :: 3.6',
