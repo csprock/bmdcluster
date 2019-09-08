@@ -1,21 +1,23 @@
-# -*- coding: utf-8 -*-
+"""
+This file contains the main wrapper class for using the bmdcluster package.
+"""
 
-"""Main module."""
-
+# TODO: delete this file
+############# DO NOT EDIT ########
 
 import numpy as np
 
-if __name__ == "__main__":
-   from optimizers.blockdiagonalBMD import run_bd_BMD
-   from optimizers.generalBMD import run_BMD
-   from initializers.primaryInitializer import initializeClusters
-else:
-    from .optimizers.blockdiagonalBMD import run_bd_BMD
-    from .optimizers.generalBMD import run_BMD
-    from .initializers.primaryInitializer import initializeClusters
+#if __name__ == "__main__":
+from bmdcluster.optimizers.blockdiagonalBMD import run_bd_BMD
+from bmdcluster.optimizers.generalBMD import run_BMD
+from bmdcluster.initializers.primaryInitializer import initializeClusters
+# else:
+#     from .optimizers.blockdiagonalBMD import run_bd_BMD
+#     from .optimizers.generalBMD import run_BMD
+#     from .initializers.primaryInitializer import initializeClusters
 
 
-class BMD:
+class bmdcluster:
     """ Wrapper class for BMD clustering methods. """
 
     def __init__(self, n_clusters, method, B_ident, use_bootstrap = False,  **kwargs):

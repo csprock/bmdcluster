@@ -45,7 +45,7 @@ class TestBMD_bd(unittest.TestCase):
 
 
 
-        BMD_model = bmdcluster.BMD(n_clusters = self.C,
+        BMD_model = bmdcluster.bmdcluster(n_clusters = self.C,
                                    method = 'block_diagonal',
                                    B_ident = True,
                                    use_bootstrap = True,
@@ -97,7 +97,7 @@ class TestBMD_general(unittest.TestCase):
             B_expected[i,c[j]*2] = True
 
 
-        BMD_model = bmdcluster.BMD(n_clusters = self.C,
+        BMD_model = bmdcluster.bmdcluster(n_clusters = self.C,
                                    method = 'general',
                                    B_ident = True,
                                    use_bootstrap = False,

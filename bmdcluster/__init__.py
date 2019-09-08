@@ -1,1 +1,1 @@
-from bmdcluster.BMD import BMD
+from bmdcluster.bmdcluster import bmdcluster
