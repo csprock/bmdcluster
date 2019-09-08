@@ -1,14 +1,9 @@
-
 import unittest
-import os, sys
 import numpy as np
 
-# if __name__ == '__main__':
-
-#     mypath = os.path.dirname(os.path.realpath('__file__'))
-#     sys.path.append(os.path.join(mypath, os.pardir))
-
-from bmdcluster.initializers.bootstrapInitializer import bootstrap_data, assign_bootstrapped_clusters, initializeBootstrappedClusters
+from bmdcluster.initializers.bootstrapInitializer import bootstrap_data
+from bmdcluster.initializers.bootstrapInitializer import assign_bootstrapped_clusters
+from bmdcluster.initializers.bootstrapInitializer import initializeBootstrappedClusters
 
 
 class TestboostrapInitializer(unittest.TestCase):

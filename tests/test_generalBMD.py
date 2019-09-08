@@ -1,15 +1,10 @@
-
-import numpy as np
 import unittest
-import os, sys
+import numpy as np
 
-# if __name__ == '__main__':
-#     mypath = os.path.dirname(os.path.realpath('__file__'))
-#     sys.path.append(os.path.join(mypath, os.pardir))
-
-from bmdcluster.optimizers.generalBMD import run_BMD, _updateB, _updateA, _updateX
-
-
+from bmdcluster.optimizers.generalBMD import run_BMD
+from bmdcluster.optimizers.generalBMD import _updateB
+from bmdcluster.optimizers.generalBMD import _updateA
+from bmdcluster.optimizers.generalBMD import _updateX
 
 
 class TestExampleDataset_General(unittest.TestCase):

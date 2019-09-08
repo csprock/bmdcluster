@@ -1,18 +1,10 @@
 import unittest
-import sys, os
-
-
-if __name__ == '__main__':
-    mypath = os.path.dirname(os.path.realpath('__file__'))
-    sys.path.append(os.path.join(mypath, os.pardir))
 
 import test_blockdiagonalBMD
 import test_generalBMD
 import test_bootstrapInitializer
 import test_clusterInitializers
 import test_bmdcluster
-
-
 
 loader = unittest.TestLoader()
 suite = unittest.TestSuite()

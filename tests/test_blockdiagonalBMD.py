@@ -1,16 +1,11 @@
-
 import unittest
-import os, sys
 import numpy as np
 
-# if __name__ == '__main__':
-    
-#     mypath = os.path.dirname(os.path.realpath('__file__'))
-#     sys.path.append(os.path.join(mypath, os.pardir))
-    
-
-from bmdcluster.optimizers.blockdiagonalBMD import run_bd_BMD, _bd_updateB, _bd_updateA, _d_ik, _Y
-
+from bmdcluster.optimizers.blockdiagonalBMD import run_bd_BMD
+from bmdcluster.optimizers.blockdiagonalBMD import _bd_updateB
+from bmdcluster.optimizers.blockdiagonalBMD import _bd_updateA
+from bmdcluster.optimizers.blockdiagonalBMD import _d_ik
+from bmdcluster.optimizers.blockdiagonalBMD import _Y
 
 
 class TestExampleDataset_BD(unittest.TestCase):

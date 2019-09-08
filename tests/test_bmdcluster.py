@@ -1,20 +1,7 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
-"""Tests for `bmdcluster` package."""
-
 import unittest
-import os, sys
 import numpy as np
 
-# if __name__ == '__main__':
-
-#     mypath = os.path.dirname(os.path.realpath('__file__'))
-#     sys.path.append(os.path.join(mypath, os.pardir))
-
 import bmdcluster
-
-
 
 
 class TestBMD_bd(unittest.TestCase):

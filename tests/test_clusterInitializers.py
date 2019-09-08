@@ -1,13 +1,10 @@
 import unittest
 import numpy as np
-import os, sys
+import os
+import sys
 
-# if __name__ == '__main__':
-
-#     mypath = os.path.dirname(os.path.realpath('__file__'))
-#     sys.path.append(os.path.join(mypath, os.pardir))
-
-from bmdcluster.initializers.clusterInitializers import initializeA, initializeB
+from bmdcluster.initializers.clusterInitializers import initializeA
+from bmdcluster.initializers.clusterInitializers import initializeB
 
 
 class TestInitializeA(unittest.TestCase):
