@@ -1,7 +1,7 @@
 import unittest
 import numpy as np
 
-from bmdcluster import bmdcluster
+from bmdcluster.bmdcluster import bmdcluster
 
 class TestBMD_bd(unittest.TestCase):
 
