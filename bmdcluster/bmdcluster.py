@@ -2,19 +2,11 @@
 This file contains the main wrapper class for using the bmdcluster package.
 """
 
-# TODO: delete this file
-############# DO NOT EDIT ########
-
 import numpy as np
 
-#if __name__ == "__main__":
 from bmdcluster.optimizers.blockdiagonalBMD import run_bd_BMD
 from bmdcluster.optimizers.generalBMD import run_BMD
 from bmdcluster.initializers.primaryInitializer import initializeClusters
-# else:
-#     from .optimizers.blockdiagonalBMD import run_bd_BMD
-#     from .optimizers.generalBMD import run_BMD
-#     from .initializers.primaryInitializer import initializeClusters
 
 
 class bmdcluster:
@@ -46,6 +38,9 @@ class bmdcluster:
 
         """
 
+        # TODO: more efficient handling of kwargs
+        # TODO: set B_ident default to True
+        # TODO: create better argument names (rename f_clusters to m_clusters)
 
         self.n_clusters = n_clusters
         self.method = method
