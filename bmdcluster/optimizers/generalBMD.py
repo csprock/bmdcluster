@@ -303,7 +303,7 @@ def _updateB(A,B,X,W):
     return B_new
 
 
-
+# TODO: create max_iter or until convergence
 def run_BMD(A,B,W, verbose = 1):
     """
     Executes clustering Algorithm 1 from Li (2005). 
@@ -328,7 +328,7 @@ def run_BMD(A,B,W, verbose = 1):
     O_old = _objective(A, B, X, W)
     
     if verbose: print(O_old)
-    
+
     while True:
         A = _updateA(A,B,X,W)
         B = _updateB(A,B,X,W)

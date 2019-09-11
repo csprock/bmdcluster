@@ -7,14 +7,13 @@ import numpy as np
 from bmdcluster.optimizers.blockdiagonalBMD import run_bd_BMD
 from bmdcluster.optimizers.generalBMD import run_BMD
 from bmdcluster.initializers.primaryInitializer import initializeClusters
-
+        
 
 class bmdcluster:
-    """ Wrapper class for BMD clustering methods. """
 
     def __init__(self, n_clusters, method, B_ident, use_bootstrap = False,  **kwargs):
-        """
-        Instantiates configuration parameters for the BMD algorithm.
+
+        """Instantiates the :code:`bmdcluster` class with given parameters.
 
         Parameters
         ----------
@@ -27,20 +26,31 @@ class bmdcluster:
         use_bootstrap: bool
             Initialize data cluster matrix A matrix using bootstrapped subset. (If try requires 'b' to be set in kwargs)
 
-        kwargs
-        ------
-        b: int
+        Keyword Arguments
+        -----------------
+        b: int, optional
             size of bootstrapped subset
-        f_clusters: int
+        f_clusters: int, optional
             desired number of feature clusters (must be set of B_ident is False)
-        init_ratio: number between 0 and 1
-            fraction of data points to randomly initialize
+        init_ratio: int, optional
+            fraction of data points to randomly initialize, must be between 0 and 1
+
+        Tip
+        ---
+        If you are unsure how many feature clusters there are or you are only interested in clustering the data, we recommend setting :code:`B_ident = True`.
+
+        Note
+        -------
+        Setting :code:`B_ident = True` may result in empty feature clusters. This is normal because putting each feature in its own cluster makes no assumptions on the relationship between features, leaving the algorithm free to group features as it sees fit.
 
         """
 
+        # TODO: add attributes to documentation
         # TODO: more efficient handling of kwargs
         # TODO: set B_ident default to True
         # TODO: create better argument names (rename f_clusters to m_clusters)
+        # TODO: create fit_transform method
+        # TODO: create reverse lookup function that returns cluster given the data point
 
         self.n_clusters = n_clusters
         self.method = method
@@ -58,7 +68,7 @@ class bmdcluster:
         else:
             self.B_ident = True
 
-
+        # TODO: add assertion that is between zero and 1
         if 'init_ratio' in kwargs:
             self.keywords['init_ratio'] = kwargs['init_ratio']
 
@@ -68,7 +78,31 @@ class bmdcluster:
 
 
     def fit(self, W, verbose = 0, return_results = False):
-        """ Runs BMD algorithm on data matrix W using instantiated parameters."""
+        """Fits algorithm to the data. 
+        
+        Parameters
+        ----------
+        W : np.array
+            binary data
+        verbose : int, optional
+            print output each iteration, by default 0
+        return_results : bool, optional
+            return final value of cost function and cluster membership matrices, otherwise saved in object, by default False
+        
+        Returns
+        -------
+        cost: float
+            final value of objective function
+        A: np.array
+            data cluster assignment matrix
+        B: np.array
+            feature cluster assignment matrix
+
+
+        Attention
+        ---------
+        Make sure the numpy array you are passing contains only 0s and 1s, otherwise the algorithm will not work properly.
+        """
 
         self.W = W
 
@@ -90,31 +124,28 @@ class bmdcluster:
         if return_results:
             return self.cost, self.A, self.B
 
-
-
+    # TODO: chance name to get_members
     def get_indices(self, i, which):
-        """
-        Get the indices of data or features of the given cluster.
-
+        """Get indices of data and feature cluster members
+        
         Parameters
         ----------
-        i: int
+        i : int
             cluster
-        which: specify which part to return cluster indices for.
-            Either 'data' or 'features'
+        which : str
+            'data' or 'features'
+        
 
         Returns
         -------
-        numpy array of indices
+        indices: np.array
+            data or feature indices belonging to the cluster
 
         Raises
-        ------
-        AssertionError:
-            'which' must be either 'data' or 'features'
-
+        -------
+        AssertionError
+            'which' keyword argument must be either 'data' or 'features'
         """
-
-
 
         assert which in ['data', 'features']
 

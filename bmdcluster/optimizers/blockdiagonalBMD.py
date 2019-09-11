@@ -154,7 +154,7 @@ def _bd_updateB(A,W):
     
 
 
-
+# create max_iter of until convergence
 def run_bd_BMD(A,W, verbose = 1):
     
     """
@@ -179,7 +179,7 @@ def run_bd_BMD(A,W, verbose = 1):
     O_old = _bd_objective(A, B, W)
     
     if verbose: print(O_old)
-    
+
     while True:
         A = _bd_updateA(A,B,W)
         B = _bd_updateB(A,W)
