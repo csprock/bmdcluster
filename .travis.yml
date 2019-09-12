@@ -1,41 +1,32 @@
-# Config file for automatic testing at travis-ci.org
-
 language: python
 python:
-  - 3.7
-  - 3.6
-  - 3.5
-  - 3.4
-
-
+- 3.7
+- 3.6
+- 3.5
+- 3.4
 branches:
- only:
+  only:
   - dev
- except:
   - master
-
-# Command to install dependencies, e.g. pip install -r requirements.txt --use-mirrors
-install: 
-  - pip install --upgrade pip
-  - pip install -r requirements_dev.txt
-
-# Command to run tests, e.g. python setup.py test
+install:
+- pip install --upgrade pip
+- pip install -r requirements_dev.txt
 script:
-  - make test
-
-after_script: make clean-test
-
-# Assuming you have installed the travis-ci CLI tool, after you
-# create the Github repo and add it to Travis, run the
-# following command to finish PyPI deployment setup:
-# $ travis encrypt --add deploy.password
-# deploy:
-#   provider: pypi
-#   distributions: sdist bdist_wheel
-#   user: csprock
-#   password:
-#     secure: PLEASE_REPLACE_ME
-#   on:
-#     tags: true
-#     repo: csprock/bmdcluster
-#     python: 3.6
+- make test
+after_script: 
+ - make clean-test
+ - "curl -X POST -d 'branches=$TRAVIS_BRANCH' -d 'token=$READTHEDOCS_TOKEN' \"https://readthedocs.org/api/v2/webhook/bmdcluster/97183/\""
+deploy:
+  provider: pypi
+  distributions: sdist bdist_wheel
+  user:
+    secure: G1ddOimWWUfpzQEhF/rDn1UsqaZUb7Y3iGaOVDMsSBRZaX1ZtpolNPhlr7FiXcbVu8lVnxX4Q0XFRX+iWEtZfVieZwnZkYAgPMwU7Xpfhak0wqnhmDiPM5vGSlwvvr3edaOqtuzAm2T4IJAwfRrCmvQXlJlT1kB7cvWNxnCoMRn7/ddsnbpjt7nD/rn8lMqLeFpV0CNfQRO6g3wy0QPtwV9nEZvnVjBACehQ7RAlGzr82AzbH2stnQgPhMCAVF8x1XsAe/Q/lp5i5Jc3D0vMgHQPGuQpEfRlk/Asb/I2TkSmHW0CZ+w5t99v/O22cXUinnw8+Y5tUWkOqkqR1XuTmZj4xNIANx63+RsFhecBCU7/rB+iSl/Uii4OENM2rYe3CTXuSTG21nXFhojrrWtZ09qtcxTKxdlNBfkdTum0gtuow+Lb9z09ypUfWKYAb6ctYAbLMa3qRQyBDAFSoxhyWVrw19KQ4xtf/Bp/ejQ3Z3M0LWIY7DTjygnJmIuBiH6qCqx95wRVv7GNfWIrGsw5GNy0BMfAaRlThxDxz4xaLlMk0DmlB/zPvAfNBVaoDMCc4TztCDrhgZImMmrmwFtCzNLqiKriGkDsdQltiEL9wJ3t44xKVlqVW4jqnasXMbogZAT61wKtGz7gND5Np+nPmgYNLLfsDjbqPbKbl7V5qo4=
+  password:
+    secure: igs00h9qTxjFV3xsclKTOjokulP9othebrQNFBr71wFKCSginmAVVNTTYcuG14CfkCy42+zZldJ3BgmK9rC90YqV/ito8OAWiSfCEsl+55IVi3n03uk9pt16A/GG3EgGfoBDXus+9u7flRPT5z7bYBAb2Z6TzywPbYgEDDyw/gQsTiVOppz8Qtza/n9x1rAc6989fULIOihA6WN4BGjd+RUSChqrZaCJMGs/b84TjiZqd/DormFPw1qDTi99n3LKat4PWC9dpUObcSryXNjn8ljRleAmpIa09jrXFwjM5+mLJ1NhMF4MG4KqYwtKhvnDK2L6c3kdFbI1KBB+smTTIoPbI1KGbA10m1v9QmQVdIFyYsBs+RV7wSQBKQb6eQyVR5+rLId/KGtZ8sDie8ZAQKfMBcytMdgCtz9CE5Yr+0+CqILjIOc5qbTt3KodNFpG/1W99j5YhNR85OdZogshGAZWmdSABFFUVLwAQo3KDIvI/R0m3Wx5EVeSmI02QRCUuVNeuD2CiHIlNy/dKO4L65aKF+HarMgqnISFBWYN2RGTS1lkVCzhwVwx9+0KVYLFTeiRblxeYxGcG8PhB73IABubmuCek7ys+D+vTc+FWaj1DiOgJNl0EwOVtPT9HoeqkO+Puui8R6gfNLji0IjMktbtVgnUq8VZCrhhel3gtyE=
+  on:
+    tags: true
+    repo: csprock/bmdcluster
+    python: 3.6
+after_deploy:
+  - make clean
+  - "curl -X POST -d 'branches=$TRAVIS_BRANCH' -d 'token=$READTHEDOCS_TOKEN' \"https://readthedocs.org/api/v2/webhook/bmdcluster/97183/\""
