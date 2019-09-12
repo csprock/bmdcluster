@@ -35,13 +35,6 @@ Implement Features
 Look through the GitHub issues for features. Anything tagged with "enhancement"
 and "help wanted" is open to whoever wants to implement it.
 
-Write Documentation
-~~~~~~~~~~~~~~~~~~~
-
-bmdcluster could always use more documentation, whether as part of the
-official bmdcluster docs, in docstrings, or even on the web in blog posts,
-articles, and such.
-
 Submit Feedback
 ~~~~~~~~~~~~~~~
 
@@ -100,9 +93,8 @@ Before you submit a pull request, check that it meets these guidelines:
 
 1. The pull request should include tests.
 2. If the pull request adds functionality, the docs should be updated. Put
-   your new functionality into a function with a docstring, and add the
-   feature to the list in README.rst.
-3. The pull request should work for Python 2.7, 3.4, 3.5 and 3.6, and for PyPy. Check
+   your new functionality into a function with a docstring.
+3. The pull request should work for Python 3.4, 3.5, 3.6, 3.7 and for PyPy. Check
    https://travis-ci.org/csprock/bmdcluster/pull_requests
    and make sure that the tests pass for all supported Python versions.
 
@@ -114,15 +106,4 @@ To run a subset of tests::
 $ py.test tests.test_bmdcluster
 
 
-Deploying
----------
 
-A reminder for the maintainers on how to deploy.
-Make sure all your changes are committed (including an entry in HISTORY.rst).
-Then run::
-
-$ bumpversion patch # possible: major / minor / patch
-$ git push
-$ git push --tags
-
-Travis will then deploy to PyPI if tests pass.

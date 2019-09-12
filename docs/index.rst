@@ -1,14 +1,18 @@
 Welcome to bmdcluster's documentation!
 ======================================
 
+Python implementation of the Binary Matrix Decomposition algorithm for clustering binary data.
+
+* Free software: MIT license
+
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
    readme
    installation
-   usage
    modules
+   usage
    contributing
    history
 
