@@ -1,4 +1,3 @@
-# .readthedocs.yml
 version: 2
 sphinx:
   configuration: docs/config.py
@@ -9,3 +8,4 @@ python:
   install:
     - requirements: requirements_dev.txt
     - method: pip
+    - path: ./
