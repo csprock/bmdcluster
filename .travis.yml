@@ -15,7 +15,6 @@ script:
 - make test
 after_script: 
  - make clean-test
- - "curl -X POST -d 'branches=$TRAVIS_BRANCH' -d 'token=$READTHEDOCS_TOKEN' \"https://readthedocs.org/api/v2/webhook/bmdcluster/97183/\""
 deploy:
   provider: pypi
   distributions: sdist bdist_wheel
