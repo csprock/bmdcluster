@@ -1,0 +1,11 @@
+# .readthedocs.yml
+version: 2
+sphinx:
+  configuration: docs/config.py
+  builder: html
+  fail_on_warning: true
+python:
+  version: 3.6
+  install:
+    - requirements: requirements_dev.txt
+    - method: pip
