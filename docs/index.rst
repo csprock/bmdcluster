@@ -1,9 +1,26 @@
 Welcome to bmdcluster's documentation!
 ======================================
 
-Python implementation of the Binary Matrix Decomposition algorithm for clustering binary data.
+.. image:: https://img.shields.io/pypi/v/bmdcluster.svg
+        :target: https://pypi.python.org/pypi/bmdcluster
 
-* Free software: MIT license
+.. image:: https://img.shields.io/travis/csprock/bmdcluster.svg
+        :target: https://travis-ci.org/csprock/bmdcluster
+
+.. image:: https://readthedocs.org/projects/bmdcluster/badge/?version=latest
+        :target: https://bmdcluster.readthedocs.io/en/latest/?badge=latest
+        :alt: Documentation Status
+
+.. image:: https://img.shields.io/badge/License-MIT-yellow.svg
+        :target: https://opensource.org/licenses/MIT
+
+
+A Python implementation of the Binary Matrix Decomposition algorithm for clustering binary data.
+
+.. warning::
+   :code:`bmdcluster` is currently experimental, and as such the API and functionality are subject to frequent changes. If you decide to use
+   it, please check for updates frequently.
+
 
 .. toctree::
    :maxdepth: 2
@@ -19,5 +36,6 @@ Python implementation of the Binary Matrix Decomposition algorithm for clusterin
 Indices and tables
 ==================
 * :ref:`genindex`
-* :ref:`modindex`
 * :ref:`search`
+
+.. * :ref:`modindex`

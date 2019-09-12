@@ -5,9 +5,10 @@ Contributing
 ============
 
 Contributions are welcome, and they are greatly appreciated! Every little bit
-helps, and credit will always be given.
+helps, and credit will always be given. We are especially interested in suggestions
+on how to speed up the algorithm.
 
-You can contribute in many ways:
+You can contribute in several ways:
 
 Types of Contributions
 ----------------------
@@ -23,18 +24,6 @@ If you are reporting a bug, please include:
 * Any details about your local setup that might be helpful in troubleshooting.
 * Detailed steps to reproduce the bug.
 
-Fix Bugs
-~~~~~~~~
-
-Look through the GitHub issues for bugs. Anything tagged with "bug" and "help
-wanted" is open to whoever wants to implement it.
-
-Implement Features
-~~~~~~~~~~~~~~~~~~
-
-Look through the GitHub issues for features. Anything tagged with "enhancement"
-and "help wanted" is open to whoever wants to implement it.
-
 Submit Feedback
 ~~~~~~~~~~~~~~~
 
@@ -47,8 +36,16 @@ If you are proposing a feature:
 * Remember that this is a volunteer-driven project, and that contributions
   are welcome :)
 
-Get Started!
-------------
+
+Algorithmic Enhancements
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+If you are interested in improving the performance of the algorithm, follow the instructions under Submit Feedback and tag the issue as an enhancement. The maintainers
+will contact you. Before submitting a PR, make sure the improvements are consistent with the current user interface APIs and unit tests. Also make sure all your enhancements
+pass the current unit tests. 
+
+Getting Started
+---------------
 
 Ready to contribute? Here's how to set up `bmdcluster` for local development.
 
@@ -70,13 +67,11 @@ Ready to contribute? Here's how to set up `bmdcluster` for local development.
    Now you can make your changes locally.
 
 5. When you're done making changes, check that your changes pass flake8 and the
-   tests, including testing other Python versions with tox::
+   tests
 
     $ flake8 bmdcluster tests
     $ python setup.py test or py.test
-    $ tox
 
-   To get flake8 and tox, just pip install them into your virtualenv.
 
 6. Commit your changes and push your branch to GitHub::
 
@@ -91,19 +86,14 @@ Pull Request Guidelines
 
 Before you submit a pull request, check that it meets these guidelines:
 
-1. The pull request should include tests.
+1. The pull request should include new tests or pass existing ones.
 2. If the pull request adds functionality, the docs should be updated. Put
    your new functionality into a function with a docstring.
 3. The pull request should work for Python 3.4, 3.5, 3.6, 3.7 and for PyPy. Check
    https://travis-ci.org/csprock/bmdcluster/pull_requests
    and make sure that the tests pass for all supported Python versions.
 
-Tips
-----
 
-To run a subset of tests::
-
-$ py.test tests.test_bmdcluster
 
 
 

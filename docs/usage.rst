@@ -33,6 +33,11 @@ Below is an example showing how to use the init_ratio setting to control the fra
 
    model = bmdcluster(data_clusters = 2, method = 'general', B_ident = True, init_ratio = 0.25)
 
+.. note::
+
+    Since the algorithm is heavily dependent on the choice of initial points,
+    it may be necessary to run the algorithm several times until a sufficiently low cost or satisfactory clusters are achieved.
+
 To access the cluster assignment matrices, you may call them as attributes of the :code:`bmdcluster` object or 
 you may assign them when fitting the model by setting :code:`return_results = True`.
 
@@ -43,21 +48,15 @@ you may assign them when fitting the model by setting :code:`return_results = Tr
    # access as attributes
    print(model.A)
 
+.. note::
+   The algorithm's runtime is :math:`O(n^3)`, so may not be suitable for large datasets. 
 
 .. note::
 
     Unless you are using the block diagonal variant of the algorithm, there is no relationship between the data clusters and the feature clusters.
-    That is, data cluster 1 and feature cluster 1 do not refer to the same cluster.
+    That is, data cluster 1 and feature cluster 1 do not refer to the same cluster. In this case, it is possible that a feature will have an equally strong affiliation to each cluster
+    and the feature is not assigned to a cluster. This is normal and authors refer to such a feature as an "outlier".
 
-.. note::
-
-    In the block diagonal case, it is possible that a feature will have an equally strong affiliation to each cluster.
-    In this case, the feature is not assigned to a cluster. The authors refer to such a feature as an "outlier".
-
-.. note::
-
-    Since the algorithm is heavily dependent on the choice of initial points,
-    it may be necessary to run the algorithm several times until a sufficiently low cost or satisfactory clusters are achieved.
 
 .. note::
 
