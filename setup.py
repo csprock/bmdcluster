@@ -7,8 +7,12 @@ from setuptools import setup, find_packages
 
 import bmdcluster
 
-with open('README.rst') as readme_file:
-    readme = readme_file.read()
+readme = """
+A Python implementation of the Binary Matrix Decomposition algorithm for clustering binary data.
+
+* Documentation: https://bmdcluster.readthedocs.io.
+* GitHub: https://github.com/csprock/bmdcluster
+"""
 
 with open('HISTORY.rst') as history_file:
     history = history_file.read()
