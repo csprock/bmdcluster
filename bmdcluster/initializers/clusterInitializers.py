@@ -6,7 +6,7 @@ import numpy as np
 ###############################################################################
 
 
-def initializeB(m, B_ident, **kwargs):
+def initializeB(m, f_clusters=None, B_ident=False, seed=None):
 
     """
     This function initializes the feature cluster indicator matrix B. There are two initialization options.
@@ -40,21 +40,28 @@ def initializeB(m, B_ident, **kwargs):
         B_init = np.identity(m)
     else:
 
-        if 'f_clusters' not in kwargs.keys(): raise KeyError("Missing required keyword '%s'" % 'f_clusters')
-        assert 1 < kwargs['f_clusters'] <= m
+        #if 'f_clusters' not in kwargs.keys(): raise KeyError("Missing required keyword '%s'" % 'f_clusters')
 
-        if 'seed' in kwargs.keys(): np.random.seed(kwargs['seed'])
+        if not f_clusters:
+            raise KeyError("Missing required keyword 'f_clusters'")
 
-        C = kwargs['f_clusters']
+        assert 1 < f_clusters <= m
 
-        B_init = np.zeros((m, C))
-        for i in range(C): B_init[i, np.random.randint(C)] = 1
+        np.random.seed(seed)
+
+        #C = kwargs['f_clusters']
+
+        B_init = np.zeros((m, f_clusters))
+        for i in range(f_clusters): 
+            B_init[i, np.random.randint(f_clusters)] = 1
+
+        np.random.seed(None)
 
     return B_init
 
 
 
-def initializeA(n, n_clusters, **kwargs):
+def initializeA(n, n_clusters, init_ratio=None, bootstrap=None, seed=None):
 
     """
     Initialize data cluster indicator matrix A. There are three initialization options.
@@ -94,20 +101,40 @@ def initializeA(n, n_clusters, **kwargs):
 
     A_init = np.zeros((n, n_clusters))
 
-    if 'bootstrap' in kwargs.keys():
-        # Iterate through list of tuples, placing a 1 the corresponding position in A_init.
-        for u in kwargs['bootstrap']: A_init[u[0], u[1]] = 1
+    if bootstrap:
+        for u in bootstrap:
+            A_init[u[0], u[1]] = 1
     else:
+        
+        if seed:
+            np.random.seed(seed)
+        
+        if init_ratio is not None:
 
-        if 'seed' in kwargs.keys(): np.random.seed(kwargs['seed'])
+            assert 0 < init_ratio <= 1
 
-        if 'init_ratio' in kwargs.keys():
-            assert 0 < kwargs['init_ratio'] <= 1
             # Select a random fraction of points of size init_ratio.
-            for j in np.random.choice(range(n), size = int(n*kwargs['init_ratio']), replace = False):
+            for j in np.random.choice(range(n), size = int(n*init_ratio), replace = False):
                 A_init[j, np.random.randint(n_clusters)] = 1
         else:
-            for j in range(n): A_init[j, np.random.randint(n_clusters)] = 1
+
+            for j in range(n): 
+                A_init[j, np.random.randint(n_clusters)] = 1
+
+    # if 'bootstrap' in kwargs.keys():
+    #     # Iterate through list of tuples, placing a 1 the corresponding position in A_init.
+    #     for u in kwargs['bootstrap']: A_init[u[0], u[1]] = 1
+    # else:
+
+    #     if 'seed' in kwargs.keys(): np.random.seed(kwargs['seed'])
+
+    #     if 'init_ratio' in kwargs.keys():
+    #         assert 0 < kwargs['init_ratio'] <= 1
+    #         # Select a random fraction of points of size init_ratio.
+    #         for j in np.random.choice(range(n), size = int(n*kwargs['init_ratio']), replace = False):
+    #             A_init[j, np.random.randint(n_clusters)] = 1
+    #     else:
+    #         for j in range(n): A_init[j, np.random.randint(n_clusters)] = 1
 
 
     return A_init

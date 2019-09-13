@@ -24,27 +24,27 @@ class TestboostrapInitializer(unittest.TestCase):
 
 
         with self.subTest('Test output type and length using general method'):
-            output = initializeBootstrappedClusters(W = self.W, n_clusters = self.K, method = 'general', B_ident = True, b = 5, seed = self.seed)
+            output = initializeBootstrappedClusters(W=self.W, n_clusters=self.K, method='general', B_ident=True, b=5, seed=self.seed)
             self.assertTrue(isinstance(output, list))
             self.assertEqual(len(output), 5)
 
 
         with self.subTest('Test output type and length using block diagonal method'):
-            output = initializeBootstrappedClusters(W = self.W, n_clusters = self.K, method = 'block_diagonal', B_ident = True, b = 5, seed = self.seed)
+            output = initializeBootstrappedClusters(W=self.W, n_clusters=self.K, method='block_diagonal', B_ident=True, b=5, seed=self.seed)
             self.assertTrue(isinstance(output, list))
             self.assertEqual(len(output), 5)
 
 
     def test_bootstrap_data_assertions(self):
 
-        with self.subTest('Test input size assertion'):
+        with self.subTest('Test assert b<=N'):
             with self.assertRaises(AssertionError):
-                bootstrap_data(N = 1, b = 2)
+                bootstrap_data(N=1, b=2)
 
 
-        with self.subTest('Test bootstrap size assertion'):
-            with self.assertRaises(KeyError):
-                bootstrap_data(N = 10)
+        # with self.subTest('Test missing keyword b assertion'):
+        #     with self.assertRaises(KeyError):
+        #         bootstrap_data(N=10)
 
     def test_bootstrap_data_outputs(self):
 
@@ -66,8 +66,6 @@ class TestboostrapInitializer(unittest.TestCase):
 
             self.assertTrue(np.array_equal(expected_samp, x_samp))
             self.assertTrue(np.array_equal(expected_rep, x_rep))
-
-
 
 
     def test_assign_bootstrapped_clusters(self):

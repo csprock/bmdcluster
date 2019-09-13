@@ -19,7 +19,7 @@ class TestInitializeA(unittest.TestCase):
             # than or equal to the size of the dataset.
             with self.assertRaises(AssertionError):
                 initializeA(n = self.n, n_clusters = self.n)
-
+        
         with self.subTest('Check init_ratio assertions'):
 
             # Check that assertion error is raised when the init_ratio is outside of
@@ -79,7 +79,16 @@ class TestInitializeB(unittest.TestCase):
             B = initializeB(self.m, B_ident = True)
             self.assertTrue(np.array_equal(np.identity(self.m), B))
 
+    
+    # def test_check_assertions(self):
 
+    #     with self.assertRaises(AssertionError):
+    #         initializeB(self.m, B_ident = False, f_clusters = self.m + 1)
+
+    #     with self.assertRaises(AssertionError):
+    #         initializeB(self.m, B_ident = False, f_clusters = 1)
+
+    #@unittest.skip("No longer using keyword arguments in initializeB")
     def test_initializeB_assertions(self):
 
         with self.subTest('Check missing keyword argument'):

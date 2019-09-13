@@ -10,7 +10,7 @@ from ..optimizers.generalBMD import run_BMD
 ###############################################################################
 
 
-def bootstrap_data(N, **kwargs):
+def bootstrap_data(N, b, seed=None):
     """
     This function computes sets of indices used to create a bootstrapped sample of data.
     A subset of size b is chosen randomly from a set of indices ranging from 0 to N-1. This 
@@ -18,12 +18,13 @@ def bootstrap_data(N, **kwargs):
 
     Parameters
     ----------
-    N: size of data set
+    N: int
+        size of data set
+    b: int
+        size of subset used to bootstrap is passed to bootstrap_data()
+    seed: int
+        seed for numpy's random number generator
 
-    kwargs
-    ------
-    b: size of subset used to bootstrap is passed to bootstrap_data()
-    seed: seed for numpy's random number generator
 
     Returns
     -------
@@ -33,16 +34,19 @@ def bootstrap_data(N, **kwargs):
     Raises
     ------
     AssertionError: raises assertion error if b > N
-    MissingKeywordArgument: if 'b' is missing, raises exception
 
     """
-    if 'b' not in kwargs.keys(): raise KeyError("Missing required kwarg '%s'" % 'b')
-    assert kwargs['b'] <= N
+    #if 'b' not in kwargs.keys(): raise KeyError("Missing required kwarg '%s'" % 'b')
+    assert b <= N
 
-    if 'seed' in kwargs.keys(): np.random.seed(kwargs['seed'])
+    #if 'seed' in kwargs.keys(): np.random.seed(kwargs['seed'])
+    if seed:
+        np.random.seed(seed)
 
-    x_samp = np.random.choice(range(N), size = kwargs['b'], replace = False)
-    x_rep = np.random.choice(x_samp, size = N, replace = True)
+    x_samp = np.random.choice(range(N), size=b, replace = False)
+    x_rep = np.random.choice(x_samp, size =N, replace = True)
+
+    np.random.seed(None)
 
     return x_samp, x_rep
 
@@ -76,7 +80,7 @@ def assign_bootstrapped_clusters(A_boot, x_rep, x_samp):
     return seed_points
 
 
-def initializeBootstrappedClusters(W, method, n_clusters, B_ident, **kwargs):
+def initializeBootstrappedClusters(W, method, n_clusters, B_ident, b, seed=None):
     """
     This function creates initial seed clusters for the BMD algorithm by bootstrapping a subset
     of data and running the BMD algorithm on this bootstrapped subset to create data
@@ -100,6 +104,8 @@ def initializeBootstrappedClusters(W, method, n_clusters, B_ident, **kwargs):
     n_clusters: number of data clusters
     B_ident: bool
         initialize feature cluster matrix to identity, is passed to initializeB()
+    b: int
+        size of subset used to bootstrap, passed to bootstrap_data()
 
     kwargs
     ------
@@ -116,16 +122,16 @@ def initializeBootstrappedClusters(W, method, n_clusters, B_ident, **kwargs):
 
 
     n, m = W.shape
-    x_samp, x_rep = bootstrap_data(n, **kwargs)
+    x_samp, x_rep = bootstrap_data(n, b=b, seed=seed)
 
     if method == 'block_diagonal':
-        A_init = initializeA(n, n_clusters, **kwargs)
-        _, A_boot, _ = run_bd_BMD(A_init, W[x_rep,:], verbose = 0)
+        A_init = initializeA(n=n, n_clusters=n_clusters, seed=seed)
+        _, A_boot, _ = run_bd_BMD(A_init, W[x_rep,:], verbose=0)
     else:
-        A_init = initializeA(n, n_clusters, **kwargs)
-        B_init = initializeB(m, B_ident, **kwargs)
+        A_init = initializeA(n=n, n_clusters=n_clusters, seed=seed)
+        B_init = initializeB(m=m, B_ident=B_ident, seed=seed)
 
-        _, A_boot, _ = run_BMD(A_init, B_init, W[x_rep,:], verbose = 0)
+        _, A_boot, _ = run_BMD(A_init, B_init, W[x_rep,:], verbose=0)
 
     seed_points = assign_bootstrapped_clusters(A_boot, x_rep, x_samp)
 
