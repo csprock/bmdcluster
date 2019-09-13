@@ -40,8 +40,6 @@ def initializeB(m, f_clusters=None, B_ident=False, seed=None):
         B_init = np.identity(m)
     else:
 
-        #if 'f_clusters' not in kwargs.keys(): raise KeyError("Missing required keyword '%s'" % 'f_clusters')
-
         if not f_clusters:
             raise KeyError("Missing required keyword 'f_clusters'")
 
@@ -94,10 +92,7 @@ def initializeA(n, n_clusters, init_ratio=None, bootstrap=None, seed=None):
 
     """
 
-
     assert 1 < n_clusters < n
-
-
 
     A_init = np.zeros((n, n_clusters))
 

@@ -1,9 +1,8 @@
 import numpy as np
 
-from .clusterInitializers import initializeA, initializeB
-from ..optimizers.blockdiagonalBMD import run_bd_BMD
-from ..optimizers.generalBMD import run_BMD
-
+from bmdcluster.initializers.clusterInitializers import initializeA, initializeB
+from bmdcluster.optimizers.blockdiagonalBMD import run_bd_BMD
+from bmdcluster.optimizers.generalBMD import run_BMD
 
 ###############################################################################
 #####             bootstrapping cluster functions                        ######
@@ -36,10 +35,8 @@ def bootstrap_data(N, b, seed=None):
     AssertionError: raises assertion error if b > N
 
     """
-    #if 'b' not in kwargs.keys(): raise KeyError("Missing required kwarg '%s'" % 'b')
     assert b <= N
 
-    #if 'seed' in kwargs.keys(): np.random.seed(kwargs['seed'])
     if seed:
         np.random.seed(seed)
 
@@ -117,9 +114,6 @@ def initializeBootstrappedClusters(W, method, n_clusters, B_ident, b, seed=None)
     seed_points: list of tuples
 
     """
-
-    #assert method in ['general','block_diagonal']
-
 
     n, m = W.shape
     x_samp, x_rep = bootstrap_data(n, b=b, seed=seed)
