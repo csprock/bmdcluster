@@ -51,7 +51,7 @@ def initialize_B(m, B_ident=False, f_clusters=None, seed=None):
     return B_init
 
 
-def initialize_A(n, n_clusters, init_ratio=None, bootstrap=None, seed=None):
+def initialize_A(n, n_clusters, init_ratio=1.0, bootstrap=None, seed=None):
 
     """Initialize data cluster indicator matrix A. There are three initialization options.
     The first option randomly assigns each point to a cluster uniformly. The second
@@ -66,8 +66,8 @@ def initialize_A(n, n_clusters, init_ratio=None, bootstrap=None, seed=None):
         number of data points
     n_clusters : int
         number of data clusters
-    init_ratio : init_ratio, optional
-        fraction of points to initialize, by default None
+    init_ratio : float, optional
+        fraction of points to initialize, by default 1.0
     bootstrap : list, optional
         list of tuples: row-column pair that corresponds to a data point and its cluster assignment, by default None
     seed : int, optional
@@ -92,10 +92,8 @@ def initialize_A(n, n_clusters, init_ratio=None, bootstrap=None, seed=None):
         if seed:
             np.random.seed(seed)
         
-        if init_ratio is not None:
-
-            assert 0 < init_ratio <= 1
-
+        assert 0 < init_ratio <= 1
+        if init_ratio < 1:
             # Select a random fraction of points of size init_ratio.
             for j in np.random.choice(range(n), size = int(n*init_ratio), replace = False):
                 A_init[j, np.random.randint(n_clusters)] = 1

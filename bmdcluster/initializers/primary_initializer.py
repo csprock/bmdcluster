@@ -4,7 +4,7 @@ from bmdcluster.initializers.cluster_initializers import initialize_A, initializ
 from bmdcluster.initializers.bootstrap_initializer import initialize_bootstrapped_clusters
 
 
-def initialize_clusters(W, method, n_clusters, b=None, f_clusters=None, init_ratio=None, B_ident=False, use_bootstrap=False, seed=None):
+def initialize_clusters(W, method, n_clusters, b=None, f_clusters=None, init_ratio=1.0, B_ident=False, use_bootstrap=False, seed=None):
     """Wrapper function for cluster initialization functions and methods.
     
     Parameters
@@ -20,7 +20,7 @@ def initialize_clusters(W, method, n_clusters, b=None, f_clusters=None, init_rat
     f_clusters : int, optional
         number of feature clusters if B_ident is False, by default None
     init_ratio : float, optional
-        fraction of points in data matrix to initialize, by default None  # TODO make this default to 1
+        fraction of points in data matrix to initialize, by default 1.0
     B_ident : bool, optional
         initialize feature cluster matrix to the identity, by default False
     use_bootstrap : bool, optional
@@ -73,11 +73,11 @@ def initialize_clusters(W, method, n_clusters, b=None, f_clusters=None, init_rat
     else:
 
         if use_bootstrap:
-            assert b is not None
-            boot = initialize_bootstrapped_clusters(W = W, 
-                                                  method = method, 
-                                                  n_clusters = n_clusters, 
-                                                  B_ident = B_ident, 
+
+            boot = initialize_bootstrapped_clusters(W=W, 
+                                                  method=method, 
+                                                  n_clusters=n_clusters, 
+                                                  B_ident=B_ident, 
                                                   b=b,
                                                   seed=seed)
             A_init = initialize_A(n=n, 
