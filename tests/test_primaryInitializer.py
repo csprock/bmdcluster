@@ -1,11 +1,11 @@
 import unittest
 import numpy as np
 
-from bmdcluster.initializers.primaryInitializer import initializeClusters
+from bmdcluster.initializers.primary_initializer import initialize_clusters
 
 
 
-class TestInitializeClusters(unittest.TestCase):
+class Testinitialize_clusters(unittest.TestCase):
 
     def test_missing_b_assertion(self):
         '''
@@ -13,7 +13,7 @@ class TestInitializeClusters(unittest.TestCase):
         '''
 
         with self.assertRaises(ValueError):
-            initializeClusters(W=None, n_clusters=None, method='block_diagonal', init_ratio=None, B_ident=False, use_bootstrap=True, b=None)
+            initialize_clusters(W=None, n_clusters=None, method='block_diagonal', init_ratio=None, B_ident=False, use_bootstrap=True, b=None)
 
 
 

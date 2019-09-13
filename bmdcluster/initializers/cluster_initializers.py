@@ -6,7 +6,7 @@ import numpy as np
 ###############################################################################
 
 
-def initializeB(m, f_clusters=None, B_ident=False, seed=None):
+def initialize_B(m, f_clusters=None, B_ident=False, seed=None):
 
     """
     This function initializes the feature cluster indicator matrix B. There are two initialization options.
@@ -59,7 +59,7 @@ def initializeB(m, f_clusters=None, B_ident=False, seed=None):
 
 
 
-def initializeA(n, n_clusters, init_ratio=None, bootstrap=None, seed=None):
+def initialize_A(n, n_clusters, init_ratio=None, bootstrap=None, seed=None):
 
     """
     Initialize data cluster indicator matrix A. There are three initialization options.

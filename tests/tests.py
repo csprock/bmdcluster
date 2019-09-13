@@ -5,7 +5,7 @@ import test_generalBMD
 import test_bootstrapInitializer
 import test_clusterInitializers
 import test_bmdcluster
-import test_primaryInitializer
+import test_primary_initializer
 
 loader = unittest.TestLoader()
 suite = unittest.TestSuite()
@@ -16,7 +16,7 @@ suite.addTest(loader.loadTestsFromModule(test_generalBMD))
 suite.addTest(loader.loadTestsFromModule(test_bootstrapInitializer))
 suite.addTest(loader.loadTestsFromModule(test_clusterInitializers))
 suite.addTest(loader.loadTestsFromModule(test_bmdcluster))
-suite.addTest(loader.loadTestsFromModule(test_primaryInitializer))
+suite.addTest(loader.loadTestsFromModule(test_primary_initializer))
 
 
 

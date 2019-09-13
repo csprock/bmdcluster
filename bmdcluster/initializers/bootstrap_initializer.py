@@ -1,6 +1,6 @@
 import numpy as np
 
-from bmdcluster.initializers.clusterInitializers import initializeA, initializeB
+from bmdcluster.initializers.cluster_initializers import initialize_A, initialize_B
 from bmdcluster.optimizers.blockdiagonalBMD import run_bd_BMD
 from bmdcluster.optimizers.generalBMD import run_BMD
 
@@ -77,7 +77,7 @@ def assign_bootstrapped_clusters(A_boot, x_rep, x_samp):
     return seed_points
 
 
-def initializeBootstrappedClusters(W, method, n_clusters, B_ident, b, seed=None):
+def initialize_bootstrapped_clusters(W, method, n_clusters, B_ident, b, seed=None):
     """
     This function creates initial seed clusters for the BMD algorithm by bootstrapping a subset
     of data and running the BMD algorithm on this bootstrapped subset to create data
@@ -100,7 +100,7 @@ def initializeBootstrappedClusters(W, method, n_clusters, B_ident, b, seed=None)
     method: BMD clustering method either 'block_diagonal' or 'general'
     n_clusters: number of data clusters
     B_ident: bool
-        initialize feature cluster matrix to identity, is passed to initializeB()
+        initialize feature cluster matrix to identity, is passed to initialize_B()
     b: int
         size of subset used to bootstrap, passed to bootstrap_data()
 
@@ -119,11 +119,11 @@ def initializeBootstrappedClusters(W, method, n_clusters, B_ident, b, seed=None)
     x_samp, x_rep = bootstrap_data(n, b=b, seed=seed)
 
     if method == 'block_diagonal':
-        A_init = initializeA(n=n, n_clusters=n_clusters, seed=seed)
+        A_init = initialize_A(n=n, n_clusters=n_clusters, seed=seed)
         _, A_boot, _ = run_bd_BMD(A_init, W[x_rep,:], verbose=0)
     else:
-        A_init = initializeA(n=n, n_clusters=n_clusters, seed=seed)
-        B_init = initializeB(m=m, B_ident=B_ident, seed=seed)
+        A_init = initialize_A(n=n, n_clusters=n_clusters, seed=seed)
+        B_init = initialize_B(m=m, B_ident=B_ident, seed=seed)
 
         _, A_boot, _ = run_BMD(A_init, B_init, W[x_rep,:], verbose=0)
 

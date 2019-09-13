@@ -3,22 +3,22 @@ import numpy as np
 import os
 import sys
 
-from bmdcluster.initializers.clusterInitializers import initializeA
-from bmdcluster.initializers.clusterInitializers import initializeB
+from bmdcluster.initializers.cluster_initializers import initialize_A
+from bmdcluster.initializers.cluster_initializers import initialize_B
 
 
-class TestInitializeA(unittest.TestCase):
+class Testinitialize_A(unittest.TestCase):
 
     def setUp(self):
         self.n = 4
 
-    def test_initializeA_assertions(self):
+    def test_initialize_A_assertions(self):
 
         with self.subTest('Check data_cluster size assertion'):
             # Check that assertion error raised when the number of data clusters is greater
             # than or equal to the size of the dataset.
             with self.assertRaises(AssertionError):
-                initializeA(n = self.n, n_clusters = self.n)
+                initialize_A(n = self.n, n_clusters = self.n)
         
         with self.subTest('Check init_ratio assertions'):
 
@@ -26,19 +26,19 @@ class TestInitializeA(unittest.TestCase):
             # the interval (0,1].
 
             with self.assertRaises(AssertionError):
-                initializeA(n = self.n, n_clusters = self.n - 1, init_ratio = 1.1)
+                initialize_A(n = self.n, n_clusters = self.n - 1, init_ratio = 1.1)
 
             with self.assertRaises(AssertionError):
-                initializeA(n = self.n, n_clusters = self.n - 1, init_ratio = 0)
+                initialize_A(n = self.n, n_clusters = self.n - 1, init_ratio = 0)
 
 
 
-    def test_initializeA_outputs(self):
+    def test_initialize_A_outputs(self):
 
         with self.subTest('Check sum of entries'):
             # When init_ratio not set, each point should be assigned exactly one cluster.
             # Check sum of elements of cluster assignment matrix A.
-            A = initializeA(self.n, self.n-1)
+            A = initialize_A(self.n, self.n-1)
             self.assertEqual(A.sum(), self.n)
 
 
@@ -46,7 +46,7 @@ class TestInitializeA(unittest.TestCase):
         with self.subTest('Check init_ratio'):
             # Check that when init_ratio is set, the number of assigned clusters is
             # the expected number.
-            A = initializeA(n = self.n, n_clusters = self.n - 1, init_ratio = 0.5)
+            A = initialize_A(n = self.n, n_clusters = self.n - 1, init_ratio = 0.5)
             self.assertEqual(A.sum(), self.n // 2)
 
 
@@ -61,7 +61,7 @@ class TestInitializeA(unittest.TestCase):
                                    [0,0]])
 
 
-            A = initializeA(n = self.n, n_clusters = 2, bootstrap = [(0,0),(2,1)])
+            A = initialize_A(n = self.n, n_clusters = 2, bootstrap = [(0,0),(2,1)])
             self.assertTrue(np.array_equal(A, A_expected))
 
 
@@ -76,36 +76,36 @@ class TestInitializeB(unittest.TestCase):
 
         with self.subTest('Check B_ident'):
             # Check feature cluster matrix B is initialized to identity when B_ident set to True.
-            B = initializeB(self.m, B_ident = True)
+            B = initialize_B(self.m, B_ident = True)
             self.assertTrue(np.array_equal(np.identity(self.m), B))
 
     
     # def test_check_assertions(self):
 
     #     with self.assertRaises(AssertionError):
-    #         initializeB(self.m, B_ident = False, f_clusters = self.m + 1)
+    #         initialize_B(self.m, B_ident = False, f_clusters = self.m + 1)
 
     #     with self.assertRaises(AssertionError):
-    #         initializeB(self.m, B_ident = False, f_clusters = 1)
+    #         initialize_B(self.m, B_ident = False, f_clusters = 1)
 
-    #@unittest.skip("No longer using keyword arguments in initializeB")
+    #@unittest.skip("No longer using keyword arguments in initialize_B")
     def test_initializeB_assertions(self):
 
         with self.subTest('Check missing keyword argument'):
             # Check that MissingKeywordArgument raised when B_ident set to False and
             # without additional keyword arguments.
             with self.assertRaises(KeyError):
-                initializeB(self.m, B_ident = False)
+                initialize_B(self.m, B_ident = False)
 
         with self.subTest('Check assertions'):
             # Check that when f_clusters is passed, that AssertionError is raised
             # f_clusters is not in the interval (1, m].
 
             with self.assertRaises(AssertionError):
-                initializeB(self.m, B_ident = False, f_clusters = self.m + 1)
+                initialize_B(self.m, B_ident = False, f_clusters = self.m + 1)
 
             with self.assertRaises(AssertionError):
-                initializeB(self.m, B_ident = False, f_clusters = 1)
+                initialize_B(self.m, B_ident = False, f_clusters = 1)
 
 if __name__ == '__main__':
     unittest.main()

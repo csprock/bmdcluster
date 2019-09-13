@@ -1,9 +1,9 @@
 import unittest
 import numpy as np
 
-from bmdcluster.initializers.bootstrapInitializer import bootstrap_data
-from bmdcluster.initializers.bootstrapInitializer import assign_bootstrapped_clusters
-from bmdcluster.initializers.bootstrapInitializer import initializeBootstrappedClusters
+from bmdcluster.initializers.bootstrap_initializer import bootstrap_data
+from bmdcluster.initializers.bootstrap_initializer import assign_bootstrapped_clusters
+from bmdcluster.initializers.bootstrap_initializer import initialize_bootstrapped_clusters
 
 
 class TestboostrapInitializer(unittest.TestCase):
@@ -20,17 +20,17 @@ class TestboostrapInitializer(unittest.TestCase):
 
         #with self.subTest('Test clustering method assertion'):
         #    with self.assertRaises(AssertionError):
-        #        initializeBootstrappedClusters(W = self.W, n_clusters = self.K, method = 'wrong', B_ident = True)
+        #        initialize_bootstrapped_clusters(W = self.W, n_clusters = self.K, method = 'wrong', B_ident = True)
 
 
         with self.subTest('Test output type and length using general method'):
-            output = initializeBootstrappedClusters(W=self.W, n_clusters=self.K, method='general', B_ident=True, b=5, seed=self.seed)
+            output = initialize_bootstrapped_clusters(W=self.W, n_clusters=self.K, method='general', B_ident=True, b=5, seed=self.seed)
             self.assertTrue(isinstance(output, list))
             self.assertEqual(len(output), 5)
 
 
         with self.subTest('Test output type and length using block diagonal method'):
-            output = initializeBootstrappedClusters(W=self.W, n_clusters=self.K, method='block_diagonal', B_ident=True, b=5, seed=self.seed)
+            output = initialize_bootstrapped_clusters(W=self.W, n_clusters=self.K, method='block_diagonal', B_ident=True, b=5, seed=self.seed)
             self.assertTrue(isinstance(output, list))
             self.assertEqual(len(output), 5)
 
