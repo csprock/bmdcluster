@@ -5,6 +5,39 @@ from bmdcluster.initializers.bootstrap_initializer import initialize_bootstrappe
 
 
 def initialize_clusters(W, method, n_clusters, b=None, f_clusters=None, init_ratio=None, B_ident=False, use_bootstrap=False, seed=None):
+    """Wrapper function for cluster initialization functions and methods.
+    
+    Parameters
+    ----------
+    W : np.array
+        binary data matrix
+    method : str
+        BMD method, one of 'block_diagonal' or 'general'
+    n_clusters : int
+        number od data clusters
+    b : int, optional
+        size of bootstrapped subset, by default None
+    f_clusters : int, optional
+        number of feature clusters if B_ident is False, by default None
+    init_ratio : float, optional
+        fraction of points in data matrix to initialize, by default None  # TODO make this default to 1
+    B_ident : bool, optional
+        initialize feature cluster matrix to the identity, by default False
+    use_bootstrap : bool, optional
+        use bootstrapping to initialize data clusters, by default False
+    seed : int, optional
+        randomization seed, by default None
+    
+    Returns
+    -------
+    tuple
+        tuple of np.array containing (data cluster matrix, feature cluster matrix)
+    
+    Raises
+    ------
+    ValueError
+        Raised of 'b' is None and 'use_bootstrap' is True
+    """
 
     assert method in ['block_diagonal', 'general']
 
@@ -36,6 +69,7 @@ def initialize_clusters(W, method, n_clusters, b=None, f_clusters=None, init_rat
                                  seed=seed)
 
         return A_init, None
+        
     else:
 
         if use_bootstrap:

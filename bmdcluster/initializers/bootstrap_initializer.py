@@ -1,12 +1,10 @@
+""" bootstrapping cluster functions """
+
 import numpy as np
 
 from bmdcluster.initializers.cluster_initializers import initialize_A, initialize_B
 from bmdcluster.optimizers.blockdiagonalBMD import run_bd_BMD
 from bmdcluster.optimizers.generalBMD import run_BMD
-
-###############################################################################
-#####             bootstrapping cluster functions                        ######
-###############################################################################
 
 
 def bootstrap_data(N, b, seed=None):
@@ -21,18 +19,21 @@ def bootstrap_data(N, b, seed=None):
         size of data set
     b: int
         size of subset used to bootstrap is passed to bootstrap_data()
-    seed: int
-        seed for numpy's random number generator
+    seed: int, optional
+        randomization seed
 
 
     Returns
     -------
-    x_samp: array containing the indices of the subset
-    x_rep: array of length N containing replicates bootstrapped from the subset
+    x_samp: np.array
+        array containing the indices of the subset
+    x_rep: np.array
+        array of length N containing replicates bootstrapped from the subset
 
     Raises
     ------
-    AssertionError: raises assertion error if b > N
+    AssertionError: 
+        raises assertion error if b > N
 
     """
     assert b <= N
@@ -40,8 +41,10 @@ def bootstrap_data(N, b, seed=None):
     if seed:
         np.random.seed(seed)
 
+    # sample data indices
     x_samp = np.random.choice(range(N), size=b, replace = False)
-    x_rep = np.random.choice(x_samp, size =N, replace = True)
+    # create bootstrapped replicate of sampled indices
+    x_rep = np.random.choice(x_samp, size=N, replace = True)
 
     np.random.seed(None)
 
@@ -50,18 +53,23 @@ def bootstrap_data(N, b, seed=None):
 
 def assign_bootstrapped_clusters(A_boot, x_rep, x_samp):
 
-    """
+    """Returns the original indices of a bootstrapped sample point. 
+
+
     Parameters
     ----------
-    A_boot: cluster indicator matrix
-    x_rep: array containing indices of bootstrapped replicates.
-    x_samp: array containing indices of the subset used to create bootstrapped replicates
+    A_boot: np.aray
+        cluster indicator matrix
+    x_rep: np.array
+        array containing indices of bootstrapped replicates.
+    x_samp: np.array
+        array containing indices of the subset used to create bootstrapped replicates
 
 
     Returns
     -------
-    seed_points: list of integer tuples the length of x_samp
-        each tuple has the form (sample point, assigned cluster)
+    seed_points: list
+        list of integer tuples the length of x_samp each tuple has the form (sample point, assigned cluster)
 
     """
     assignments = list()
@@ -74,6 +82,7 @@ def assign_bootstrapped_clusters(A_boot, x_rep, x_samp):
         assignments.append( np.argmax( A_boot[g,:].sum(axis = 0) ))
 
     seed_points = list(zip(list(x_samp), assignments))
+
     return seed_points
 
 
@@ -86,8 +95,8 @@ def initialize_bootstrapped_clusters(W, method, n_clusters, B_ident, b, seed=Non
     Binary Data" by Li & Zhu (2005).
 
     First, the indices of the bootstrapped subset and replicated samples are generated using
-    the bootstrap_data() function. These indices are uses to create a bootstrapped dataset
-    from W for use with
+    the bootstrap_data() function. These indices are used to create a bootstrapped dataset
+    from W.
 
     Second, the assign_bootstrapped_clusters() function returns the original indices of the
     subset used for bootstrapping along with their assigned cluster. These are later used as
@@ -96,22 +105,24 @@ def initialize_bootstrapped_clusters(W, method, n_clusters, B_ident, b, seed=Non
 
     Parameters
     ----------
-    W: binary data matrix
-    method: BMD clustering method either 'block_diagonal' or 'general'
-    n_clusters: number of data clusters
+    W: np.array
+        binary data matrix
+    method: str
+        BMD clustering method either 'block_diagonal' or 'general'
+    n_clusters: int
+        number of data clusters
     B_ident: bool
         initialize feature cluster matrix to identity, is passed to initialize_B()
     b: int
         size of subset used to bootstrap, passed to bootstrap_data()
+    seed: int, optional
+        randomization seed
 
-    kwargs
-    ------
-    b: size of subset used to bootstrap
-        is passed to bootstrap_data()
 
     Returns
     -------
-    seed_points: list of tuples
+    seed_points: list
+        list of tuples containing indices of seed points
 
     """
 
