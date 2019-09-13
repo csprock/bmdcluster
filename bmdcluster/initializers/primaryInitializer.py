@@ -3,15 +3,19 @@ import numpy as np
 from bmdcluster.initializers.clusterInitializers import initializeA, initializeB
 from bmdcluster.initializers.bootstrapInitializer import initializeBootstrappedClusters
 
-def initializeClusters(W, method, n_clusters, b=None, f_clusters=None, init_ratio=None, B_ident=False, use_bootstrap=False, seed=None):
 
-    n, m = W.shape
+def initializeClusters(W, method, n_clusters, b=None, f_clusters=None, init_ratio=None, B_ident=False, use_bootstrap=False, seed=None):
 
     assert method in ['block_diagonal', 'general']
 
+    if use_bootstrap and not b:
+        raise ValueError("Must specify keyword argument 'b' when using bootstrapping.")
+
+    n, m = W.shape
+
     if method == 'block_diagonal':
         if use_bootstrap:
-            assert b is not None
+
             boot = initializeBootstrappedClusters(W=W, 
                                                   method=method, 
                                                   n_clusters=n_clusters, 
