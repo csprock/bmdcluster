@@ -22,7 +22,15 @@ class _BMD:
 
 class blockdiagonalBMD(_BMD):
 
-    def __init__(self, n_clusters, f_clusters=None, B_ident=False, use_bootstrap=False, b=None, init_ratio=1.0, seed=None):
+    def __init__(self, n_clusters, f_clusters=None, max_iter=100, B_ident=False, use_bootstrap=False, b=None, init_ratio=1.0, seed=None):
+
+        # TODO: add docstring
+
+        if use_bootstrap and not b:
+            raise ValueError("Must specify keyword argument 'b' when using bootstrapping.")
+
+        if not B_ident and not f_clusters:
+            raise ValueError("You must one of either 'B_ident' or 'f_clusters'")
 
         self.n_clusters = n_clusters
         self.B_ident = B_ident
@@ -31,6 +39,7 @@ class blockdiagonalBMD(_BMD):
         self.init_ratio = init_ratio
         self.f_clusters = f_clusters
         self.seed = seed
+        self.max_iter = max_iter
 
         super(blockdiagonalBMD, self).__init__()
 
@@ -50,11 +59,13 @@ class blockdiagonalBMD(_BMD):
                                              seed=self.seed,
                                              f_clusters=self.f_clusters)
 
-        self.cost, self.A, self.B = run_bd_BMD(self.A, self.W, verbose)
+        self.cost, self.A, self.B = run_bd_BMD(self.A, self.W, self.max_iter, verbose)
 
         return self.cost, self.A, self.B
 
     def fit_predict(self, W, verbose=False):
+
+        # TODO: add docstring
 
         cost, A, B = self.fit(W, verbose)
 
@@ -62,6 +73,8 @@ class blockdiagonalBMD(_BMD):
 
 
     def fit_transform(self, W, verbose):
+
+        # TODO: add docstring
 
         cost, A, B = self.fit(W, verbose)
 
@@ -71,7 +84,14 @@ class blockdiagonalBMD(_BMD):
 
 class generalBMD(_BMD):
 
-    def __init__(self, n_clusters, f_clusters=None, B_ident=False, use_bootstrap=False, b=None, init_ratio=1.0, seed=None):
+    def __init__(self, n_clusters, f_clusters=None, max_iter=100, B_ident=False, use_bootstrap=False, b=None, init_ratio=1.0, seed=None):
+
+        # TODO: add docstring
+        if use_bootstrap and not b:
+            raise ValueError("Must specify keyword argument 'b' when using bootstrapping.")
+
+        if not B_ident and not f_clusters:
+            raise ValueError("You must one of either 'B_ident' or 'f_clusters'")
 
         self.n_clusters = n_clusters
         self.B_ident = B_ident
@@ -80,12 +100,15 @@ class generalBMD(_BMD):
         self.init_ratio = init_ratio
         self.f_clusters = f_clusters
         self.seed = seed
+        self.max_iter = max_iter
 
 
         super(generalBMD, self).__init__()
 
     
     def fit(self, W, verbose=False):
+
+        # TODO: add docstring
 
         self.W = W
 
@@ -100,12 +123,14 @@ class generalBMD(_BMD):
                                              seed=self.seed,
                                              f_clusters=self.f_clusters)
 
-        self.cost, self.A, self.B = run_BMD(self.A, self.B, self.W, verbose)
+        self.cost, self.A, self.B = run_BMD(self.A, self.B, self.W, self.max_iter, verbose)
 
         return self.cost, self.A, self.B
 
 
     def fit_predict(self, W, verbose=False):
+
+        # TODO: add docstring
 
         cost, A, B = self.fit(W, verbose)
 
@@ -113,6 +138,8 @@ class generalBMD(_BMD):
 
 
     def fit_transform(self, W, verbose):
+
+        # TODO: add docstring
 
         cost, A, B = self.fit(W, verbose)
 

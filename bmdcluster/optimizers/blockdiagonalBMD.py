@@ -7,16 +7,35 @@ as presented in "A General Model for Clustering Binary Data" (Tao Li, 2005) and 
 rearranged into block-diagonal form. That is, each set of data is associated with a set of features and vice-versa. 
 This module implements Algorithm 2 from Li (2005) supplemented with ideas from Li & Zhu (2005). 
 
+
+General Nomenclature:
+
+ K: the number of data clusters
+ C: the number of feature clusters
+ n: size of data set
+ m: number of data features
+ W: binary data matrix
+    Is of size n x m, with data in rows and features in columns. 
+ A: data cluster indicator matrix
+    n x K binary indicator matrix encoding the cluster membership of the data. 
+    Each point can belong to exactly one cluster, so each row consists of zeros except for a single 1. 
+ B: feature cluster indicator matrix. 
+    m x C binary indicator matrix encoding the cluster membership of the features. 
+    Each feature can belong to exactly one cluster, so each row consists of zeros except for a single 1.  
+ X: a K x C matrix that encodes the relationship between data clusters and feature clusters.
+
 """
 
-
+ITER_MESSAGE = "Iteration: {0} ............. Cost: {1:.3f}"
 
 def _bd_objective(A,B,W):
+    # TODO: better docstring
     """ Objective function for block diagonal variation of BMD."""
     return np.linalg.norm(W - np.dot(A, B.T))
     
 
 def _d_ik(i, W, B):
+    # TODO: better docstring
     """
     The data cluster matrix A is updated using formula 10 from Li (2005) which is the same as 
     formula 2.3 in Li & Zhu (2005). The formula uses the squared distance between ith point and 
@@ -60,6 +79,7 @@ def _d_ik(i, W, B):
 #########################
 
 def _bd_updateA(A,B,W):
+    # TODO: better docstring
     """
     Update data cluster assignment matrix A using formula 10 in Li (2005). 
     
@@ -86,6 +106,7 @@ def _bd_updateA(A,B,W):
 
 
 def _Y(A, W):
+    # TODO: better docstring
     """
     The feature cluster matrix B is updated using formula 11 from Li (2005). This is done
     by computing a 'probability matrix' Y where the kj-th entry represents the probability
@@ -112,6 +133,7 @@ def _Y(A, W):
 
 
 def _bd_updateB(A,W):
+    # TODO: better docstring
     """
     Updated feature cluster matrix B. Applies the _Y() and B set to the matrix the same shape
     as Y but with 1's in the entries corresponding to where Y[>=0.5] and 0's elsewhere.
@@ -154,8 +176,8 @@ def _bd_updateB(A,W):
     
 
 
-# create max_iter of until convergence
-def run_bd_BMD(A,W, verbose = 1):
+# TODO: better docstring
+def run_bd_BMD(A,W, max_iter=100, verbose=1):
     
     """
     Executes clustering Algorithm 2 from Li (2005). 
@@ -180,13 +202,17 @@ def run_bd_BMD(A,W, verbose = 1):
     
     if verbose: print(O_old)
 
-    while True:
+    n_iter = 0
+
+    while n_iter < max_iter:
         A = _bd_updateA(A,B,W)
         B = _bd_updateB(A,W)
         O_new = _bd_objective(A,B,W)
         if O_new < O_old:
             O_old = O_new
-            if verbose: print(O_old)
+            if verbose and n_iter % 10 == 0: 
+                print(ITER_MESSAGE.format(n_iter, O_new))
+            n_iter += 1
         else:
             break
         

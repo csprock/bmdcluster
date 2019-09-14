@@ -8,27 +8,33 @@ are presented in the paper. This module implements Algorithm 1, which is a gener
 The BMD algorithm solves the two-sided clustering problem of clustering data points and features simultaneously. We therefore
 refer to the 'data clusters' and 'feature clusters' to mean the cluster assignments of the data points and the cluster assignments 
 of the features. 
+
+
+General Nomenclature:
+
+ K: the number of data clusters
+ C: the number of feature clusters
+ n: size of data set
+ m: number of data features
+ W: binary data matrix
+    Is of size n x m, with data in rows and features in columns. 
+ A: data cluster indicator matrix
+    n x K binary indicator matrix encoding the cluster membership of the data. 
+    Each point can belong to exactly one cluster, so each row consists of zeros except for a single 1. 
+ B: feature cluster indicator matrix. 
+    m x C binary indicator matrix encoding the cluster membership of the features. 
+    Each feature can belong to exactly one cluster, so each row consists of zeros except for a single 1.  
+ X: a K x C matrix that encodes the relationship between data clusters and feature clusters.
+
 """
 
-# General Nomenclature:
-#
-#  K: the number of data clusters
-#  C: the number of feature clusters
-#  n: size of data set
-#  m: number of data features
-#  W: binary data matrix
-#     Is of size n x m, with data in rows and features in columns. 
-#  A: data cluster indicator matrix
-#     n x K binary indicator matrix encoding the cluster membership of the data. 
-#     Each point can belong to exactly one cluster, so each row consists of zeros except for a single 1. 
-#  B: feature cluster indicator matrix. 
-#     m x C binary indicator matrix encoding the cluster membership of the features. 
-#     Each feature can belong to exactly one cluster, so each row consists of zeros except for a single 1.  
-#  X: a K x C matrix that encodes the relationship between data clusters and feature clusters.
+ITER_MESSAGE = "Iteration: {0} ............. Cost: {1:.3f}"
+
 
 
 # Computes the objective function for the general BMD algorithm.
 def _objective(A,B,X,W):
+    # TODO: better docstring
     return np.linalg.norm(W - np.dot(A, np.dot(X,B.T)))
 
 
@@ -45,6 +51,7 @@ def _objective(A,B,X,W):
 
 # Computes updated cluster relation matrix X given A,B,W.
 def _updateX(A,B,W):
+    # TODO: better docstring
     """
     Updates the cluster centroid matrix X according to Equation 5 in Li (2005).
     
@@ -103,6 +110,7 @@ def _updateX(A,B,W):
 
 
 def _m_ik(indices,W,X,B):
+    # TODO: better docstring
     """
     The data cluster indicator matrix A is updated using Formula 6 in Li (2005), which uses 
     an 'affiliation score' that can be thought of as a distance between the i-th point and
@@ -144,7 +152,7 @@ def _m_ik(indices,W,X,B):
 
 # Check if the minimum value in 1d array appears more than once. 
 def _min_dupes(r):
-    
+    # TODO: better docstring
     if len(np.argwhere(r == np.argmin(r))) > 1:
         return True
     else:
@@ -153,6 +161,7 @@ def _min_dupes(r):
 
 # Update the data cluster indicator matrix A. 
 def _updateA(A,B,X,W):
+    # TODO: better docstring
     """
     Updates the matrix A by creating a matrix M of identical dimensions whose elements are 'affiliation scores'.
     For each row, a 1 is placed in the position of the smallest entry and the rest set to 0's. In the case
@@ -219,6 +228,7 @@ def _updateA(A,B,X,W):
 
 
 def _r_jc(indices, W, X, A):
+    # TODO: better docstring
     """
     The feature cluster indicator matrix B is updated according to Formula 7 in Li (2005), which 
     uses an 'affiliation score' of the same form as that used to update A. The feature is assigned
@@ -262,6 +272,7 @@ def _r_jc(indices, W, X, A):
 
 
 def _updateB(A,B,X,W):
+    # TODO: better docstring
     """
     Updates the matrix B by creating a matrix M of identical dimensions whose elements are 'affiliation scores'.
     For each row, a 1 is placed in the position of the smallest entry and the rest set to 0's. In the case
@@ -303,8 +314,8 @@ def _updateB(A,B,X,W):
     return B_new
 
 
-# TODO: create max_iter or until convergence
-def run_BMD(A,B,W, verbose = 1):
+# TODO: better docstring
+def run_BMD(A,B,W, max_iter=100, verbose = 1):
     """
     Executes clustering Algorithm 1 from Li (2005). 
     
@@ -329,14 +340,18 @@ def run_BMD(A,B,W, verbose = 1):
     
     if verbose: print(O_old)
 
-    while True:
+    n_iter = 0
+
+    while n_iter < max_iter:
         A = _updateA(A,B,X,W)
         B = _updateB(A,B,X,W)
         X = _updateX(A,B,W)
         O_new = _objective(A,B,X,W)
         if O_new < O_old:
             O_old = O_new
-            if verbose: print(O_old)
+            if verbose and n_iter % 10 == 0: 
+                print(ITER_MESSAGE.format(n_iter, O_new))
+            n_iter += 1
         else:
             break
         
@@ -344,51 +359,5 @@ def run_BMD(A,B,W, verbose = 1):
 
 
 
-def get_indices(A, j):
-    return np.where(A[:,j] == 1)
-
-#############################
-
-#def test_loop():
-#    m_ik_loop((1,1), W, X,B)
-#
-#def test():
-#    m_ik((1,1), W, X, B)
-#
-#import timeit
-#
-#print(timeit.timeit('test()', setup = 'from __main__ import test'))
-#
-#from sklearn.metrics import confusion_matrix
-#from scipy.stats import mode
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
-
-
-
-
-
-
- 
-    
-    
+# def get_indices(A, j):
+#     return np.where(A[:,j] == 1)
