@@ -9,114 +9,39 @@ from bmdcluster.optimizers.generalBMD import run_BMD
 from bmdcluster.initializers.primary_initializer import initialize_clusters
 
 
-class bmdcluster:
+class _BMD:
 
-    def __init__(self, n_clusters, method, B_ident, use_bootstrap = False,  b=None, init_ratio=1.0, f_clusters=None, seed=None):
+    def __init__(self):
+        pass
 
-        """Instantiates the :code:`bmdcluster` class with given parameters.
+    @staticmethod
+    def _get_labels(M):
+        return M.argmax(axis=1)
 
-        Parameters
-        ----------
-        n_clusters: int
-            desired number of data clusters
-        method: string
-            variant of BMD clustering algorithm to use, either 'general' or 'block_diagonal'.
-        B_ident: bool
-            True initializes feature cluster matrix B to identity matrix
-        use_bootstrap: bool
-            Initialize data cluster matrix A matrix using bootstrapped subset. (If try requires 'b' to be set in kwargs)
 
-        Keyword Arguments
-        -----------------
-        b: int, optional
-            size of bootstrapped subset
-        f_clusters: int, optional
-            desired number of feature clusters (must be set of B_ident is False)
-        init_ratio: int, optional
-            fraction of data points to randomly initialize, must be between 0 and 1
 
-        Tip
-        ---
-        If you are unsure how many feature clusters there are or you are only interested in clustering the data, we recommend setting :code:`B_ident = True`.
+class blockdiagonalBMD(_BMD):
 
-        Note
-        -------
-        Setting :code:`B_ident = True` may result in empty feature clusters. This is normal because putting each feature in its own cluster makes no assumptions on the relationship between features, leaving the algorithm free to group features as it sees fit.
-
-        """
-
-        # TODO: add attributes to documentation
-        # TODO: more efficient handling of kwargs
-        # TODO: set B_ident default to True
-        # TODO: create better argument names (rename f_clusters to m_clusters)
-        # TODO: create fit_transform method
-        # TODO: create reverse lookup function that returns cluster given the data point
-
-        # check that if B_ident = False that f_clusters is set
-        # TODO: potentially move this to a shared function when splitting UI
-        if not B_ident:
-            assert f_clusters is not None
+    def __init__(self, n_clusters, f_clusters=None, B_ident=False, use_bootstrap=False, b=None, init_ratio=1.0, seed=None):
 
         self.n_clusters = n_clusters
-        self.method = method
-        self.use_bootstrap = use_bootstrap
         self.B_ident = B_ident
-        self.f_clusters = f_clusters
-        self.init_ratio = init_ratio
-        self.seed = seed
+        self.use_bootstrap = use_bootstrap
         self.b = b
+        self.init_ratio = init_ratio
+        self.f_clusters = f_clusters
+        self.seed = seed
 
-        # if use_bootstrap:
-        #     assert 'b' in kwargs
-        #     self.keywords['b'] = kwargs['b']
-
-        # if B_ident == False:
-        #     assert 'f_clusters' in kwargs
-        #     self.B_ident = False
-        #     self.keywords['f_clusters'] = kwargs['f_clusters']
-        # else:
-        #     self.B_ident = True
-
-        # # TODO: add assertion that is between zero and 1
-        # if 'init_ratio' in kwargs:
-        #     self.keywords['init_ratio'] = kwargs['init_ratio']
-
-        # if 'seed' in kwargs:
-        #     self.keywords['seed'] = kwargs['seed']
+        super(blockdiagonalBMD, self).__init__()
 
 
-
-    def fit(self, W, verbose = 0, return_results = False):
-        """Fits algorithm to the data. 
-        
-        Parameters
-        ----------
-        W : np.array
-            binary data
-        verbose : int, optional
-            print output each iteration, by default 0
-        return_results : bool, optional
-            return final value of cost function and cluster membership matrices, otherwise saved in object, by default False
-        
-        Returns
-        -------
-        cost: float
-            final value of objective function
-        A: np.array
-            data cluster assignment matrix
-        B: np.array
-            feature cluster assignment matrix
-
-
-        Attention
-        ---------
-        Make sure the numpy array you are passing contains only 0s and 1s, otherwise the algorithm will not work properly.
-        """
+    def fit(self, W, verbose=False):
 
         self.W = W
 
         # Initialize cluster indicator matrices.
-        self.A, self.B = initialize_clusters(self.W, method = self.method,
+        self.A, self.B = initialize_clusters(W=self.W, 
+                                             method = 'block_diagonal',
                                              n_clusters = self.n_clusters,
                                              use_bootstrap = self.use_bootstrap,
                                              B_ident = self.B_ident,
@@ -125,43 +50,70 @@ class bmdcluster:
                                              seed=self.seed,
                                              f_clusters=self.f_clusters)
 
+        self.cost, self.A, self.B = run_bd_BMD(self.A, self.W, verbose)
 
-        # Run BMD algorithm.
-        if self.method == 'general':
-            self.cost, self.A, self.B = run_BMD(self.A, self.B, self.W, verbose)
-        elif self.method == 'block_diagonal':
-            self.cost, self.A, self.B = run_bd_BMD(self.A, self.W, verbose)
+        return self.cost, self.A, self.B
 
-        # Optional: return final value of cost function and the indicator matrices.
-        if return_results:
-            return self.cost, self.A, self.B
+    def fit_predict(self, W, verbose=False):
 
-    # TODO: chance name to get_members
-    def get_indices(self, i, which):
-        """Get indices of data and feature cluster members
-        
-        Parameters
-        ----------
-        i : int
-            cluster
-        which : str
-            'data' or 'features'
-        
+        cost, A, B = self.fit(W, verbose)
 
-        Returns
-        -------
-        indices: np.array
-            data or feature indices belonging to the cluster
+        return cost, self._get_labels(A), self._get_labels(B)
 
-        Raises
-        -------
-        AssertionError
-            'which' keyword argument must be either 'data' or 'features'
-        """
 
-        assert which in ['data', 'features']
+    def fit_transform(self, W, verbose):
 
-        if which == 'data':
-            return np.where(self.A.argmax(axis = 1) == i)
-        elif which == 'features':
-            return np.where(self.B.argmax(axis = 1) == i)
+        cost, A, B = self.fit(W, verbose)
+
+        return cost, A, B
+
+
+
+class generalBMD(_BMD):
+
+    def __init__(self, n_clusters, f_clusters=None, B_ident=False, use_bootstrap=False, b=None, init_ratio=1.0, seed=None):
+
+        self.n_clusters = n_clusters
+        self.B_ident = B_ident
+        self.use_bootstrap = use_bootstrap
+        self.b = b
+        self.init_ratio = init_ratio
+        self.f_clusters = f_clusters
+        self.seed = seed
+
+
+        super(generalBMD, self).__init__()
+
+    
+    def fit(self, W, verbose=False):
+
+        self.W = W
+
+        # Initialize cluster indicator matrices.
+        self.A, self.B = initialize_clusters(W=self.W, 
+                                             method = 'general',
+                                             n_clusters = self.n_clusters,
+                                             use_bootstrap = self.use_bootstrap,
+                                             B_ident = self.B_ident,
+                                             b=self.b,
+                                             init_ratio=self.init_ratio,
+                                             seed=self.seed,
+                                             f_clusters=self.f_clusters)
+
+        self.cost, self.A, self.B = run_BMD(self.A, self.B, self.W, verbose)
+
+        return self.cost, self.A, self.B
+
+
+    def fit_predict(self, W, verbose=False):
+
+        cost, A, B = self.fit(W, verbose)
+
+        return cost, self._get_labels(A), self._get_labels(B)
+
+
+    def fit_transform(self, W, verbose):
+
+        cost, A, B = self.fit(W, verbose)
+
+        return cost, A, B

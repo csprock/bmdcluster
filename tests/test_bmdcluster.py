@@ -1,7 +1,9 @@
 import unittest
 import numpy as np
 
-from bmdcluster.bmdcluster import bmdcluster
+from bmdcluster.bmdcluster import blockdiagonalBMD
+from bmdcluster.bmdcluster import generalBMD
+
 
 class TestBMD_bd(unittest.TestCase):
 
@@ -36,14 +38,13 @@ class TestBMD_bd(unittest.TestCase):
 
 
 
-        BMD_model = bmdcluster(n_clusters = self.C,
-                                method = 'block_diagonal',
+        BMD_model = blockdiagonalBMD(n_clusters = self.C,
                                 B_ident = True,
                                 use_bootstrap = True,
                                 b = 5,
                                 seed = self.seed)
 
-        cost, A, B = BMD_model.fit(W = self.W, verbose = 0, return_results = True)
+        cost, A, B = BMD_model.fit_transform(W = self.W, verbose = 0)
 
         with self.subTest('Test for correct cost'):
             self.assertEqual(cost, 0)
@@ -53,7 +54,6 @@ class TestBMD_bd(unittest.TestCase):
 
         with self.subTest('Test for correct feature cluster matrix B'):
             self.assertTrue(np.array_equal(B_expected, B))
-
 
 
 class TestBMD_general(unittest.TestCase):
@@ -88,14 +88,13 @@ class TestBMD_general(unittest.TestCase):
             B_expected[i,c[j]*2] = True
 
 
-        BMD_model = bmdcluster(n_clusters = self.C,
-                                method = 'general',
+        BMD_model = generalBMD(n_clusters = self.C,
                                 B_ident = True,
                                 use_bootstrap = False,
                                 seed = self.seed)
 
 
-        cost, A, B = BMD_model.fit(self.W, verbose = 0, return_results = True)
+        cost, A, B = BMD_model.fit_transform(self.W, verbose = 0)
 
         with self.subTest('Test for correct cost'):
             self.assertEqual(cost, 0)
