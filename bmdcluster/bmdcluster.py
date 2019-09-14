@@ -22,9 +22,37 @@ class _BMD:
 
 class blockdiagonalBMD(_BMD):
 
-    def __init__(self, n_clusters, f_clusters=None, max_iter=100, B_ident=False, use_bootstrap=False, b=None, init_ratio=1.0, seed=None):
+    def __init__(self, n_clusters, f_clusters=None, B_ident=True, max_iter=100, use_bootstrap=False, b=None, init_ratio=1.0, seed=None):
+        """Run the block-diagonal form of the BMD algorithm. 
+        
+        Parameters
+        ----------
+        n_clusters : int
+            number of data clusters
+        f_clusters : int, optional
+            number of feature clusters, by default None
+        B_ident : bool, optional
+            initialize feature cluster assignment matrix to the identity, by default True
+        max_iter : int, optional
+            maximum number of optimization iterations, by default 100
+        use_bootstrap : bool, optional
+            use bootstrap cluster initialization, by default False
+        b : int, optional
+            number of bootstrapped samples to use, by default None
+        init_ratio : float, optional
+            fraction of points to randomly initialize, by default 1.0
+        seed : int, optional
+            random initialization seed, by default None
+        
+        Raises
+        ------
+        ValueError
+            If :code:`use_bootstrap` is set to True but and :code:`b` is not specified
+        ValueError
+            If both :code:`B_ident` and :code:`f_clusters` are not specified
+            
+        """
 
-        # TODO: add docstring
 
         if use_bootstrap and not b:
             raise ValueError("Must specify keyword argument 'b' when using bootstrapping.")
@@ -43,8 +71,17 @@ class blockdiagonalBMD(_BMD):
 
         super(blockdiagonalBMD, self).__init__()
 
-
     def fit(self, W, verbose=False):
+        """Fit the model.
+        
+        Parameters
+        ----------
+        W : np.array
+            binary data matrix
+        verbose : bool, optional
+            print progress during optimization, by default False
+        
+        """
 
         self.W = W
 
@@ -61,32 +98,96 @@ class blockdiagonalBMD(_BMD):
 
         self.cost, self.A, self.B = run_bd_BMD(self.A, self.W, self.max_iter, verbose)
 
-        return self.cost, self.A, self.B
 
     def fit_predict(self, W, verbose=False):
+        """Fit the model and return final value of objective function and 
+        cluster assignment labels for the data and features.
+        
+        Parameters
+        ----------
+        W : np.array
+            binary data matrix
+        verbose : bool, optional
+            print progress during optimization, by default False
+        
+        Returns
+        -------
+        float
+            final value of objective function
+        np.array
+            data cluster labels
+        np.array
+            feature cluster labels
+        """
 
-        # TODO: add docstring
 
-        cost, A, B = self.fit(W, verbose)
+        self.fit(W, verbose)
 
-        return cost, self._get_labels(A), self._get_labels(B)
+        return self.cost, self._get_labels(self.A), self._get_labels(self.B)
 
 
-    def fit_transform(self, W, verbose):
+    def fit_transform(self, W, verbose=False):
+        """Fit the model and return final value of objective function
+        and final values of the data and feature cluster assignment 
+        matrices A and B, whose entries are cluster affinity scores.
+        
+        Parameters
+        ----------
+        W : np.array
+            binary data matrix
+        verbose : bool, optional
+            print progress during optimization, by default False
+        
+        Returns
+        -------
+        float
+            final cost of objective function
+        np.array
+            final value of data cluster assignment matrix A
+        np.array
+            final value of feature cluster assignment matrix B
+            
+        """
 
-        # TODO: add docstring
 
-        cost, A, B = self.fit(W, verbose)
+        self.fit(W, verbose)
 
-        return cost, A, B
+        return self.cost, self.A, self.B
 
 
 
 class generalBMD(_BMD):
 
-    def __init__(self, n_clusters, f_clusters=None, max_iter=100, B_ident=False, use_bootstrap=False, b=None, init_ratio=1.0, seed=None):
+    def __init__(self, n_clusters, f_clusters=None, B_ident=True, max_iter=100, use_bootstrap=False, b=None, init_ratio=1.0, seed=None):
+        """Run the general form of the BMD algorithm.
+        
+        Parameters
+        ----------
+        n_clusters : int
+            number of data clusters
+        f_clusters : int, optional
+            number of feature clusters, by default None
+        B_ident : bool, optional
+            initialize feature cluster assignment matrix to the identity, by default True
+        max_iter : int, optional
+            maximum number of optimization iterations, by default 100
+        use_bootstrap : bool, optional
+            use bootstrap cluster initialization, by default False
+        b : int, optional
+            number of bootstrapped samples to use, by default None
+        init_ratio : float, optional
+            fraction of points to randomly initialize, by default 1.0
+        seed : int, optional
+            random initialization seed, by default None
+        
+        Raises
+        ------
+        ValueError
+            If :code:`use_bootstrap` is set to True but and :code:`b` is not specified
+        ValueError
+            If both :code:`B_ident` and :code:`f_clusters` are not specified
+        """
 
-        # TODO: add docstring
         if use_bootstrap and not b:
             raise ValueError("Must specify keyword argument 'b' when using bootstrapping.")
 
@@ -105,11 +206,17 @@ class generalBMD(_BMD):
 
         super(generalBMD, self).__init__()
 
-    
     def fit(self, W, verbose=False):
-
-        # TODO: add docstring
-
+        """Fit the model.
+        
+        Parameters
+        ----------
+        W : np.array
+            binary data matrix
+        verbose : bool, optional
+            print progress during optimization, by default False
+        
+        """
         self.W = W
 
         # Initialize cluster indicator matrices.
@@ -125,22 +232,56 @@ class generalBMD(_BMD):
 
         self.cost, self.A, self.B = run_BMD(self.A, self.B, self.W, self.max_iter, verbose)
 
-        return self.cost, self.A, self.B
 
 
     def fit_predict(self, W, verbose=False):
+        """Fit the model and return final value of objective function and 
+        cluster assignment labels for the data and features.
+        
+        Parameters
+        ----------
+        W : np.array
+            binary data matrix
+        verbose : bool, optional
+            print progress during optimization, by default False
+        
+        Returns
+        -------
+        float
+            final value of objective function
+        np.array
+            data cluster labels
+        np.array
+            feature cluster labels
+        """
 
-        # TODO: add docstring
+        self.fit(W, verbose)
 
-        cost, A, B = self.fit(W, verbose)
-
-        return cost, self._get_labels(A), self._get_labels(B)
+        return self.cost, self._get_labels(self.A), self._get_labels(self.B)
 
 
     def fit_transform(self, W, verbose):
+        """Fit the model and return final value of objective function
+        and final values of the data and feature cluster assignment 
+        matrices A and B, whose entries are cluster affinity scores.
+        
+        Parameters
+        ----------
+        W : np.array
+            binary data matrix
+        verbose : bool, optional
+            print progress during optimization, by default False
+        
+        Returns
+        -------
+        float
+            final cost of objective function
+        np.array
+            final value of data cluster assignment matrix A
+        np.array
+            final value of feature cluster assignment matrix B
+        """
 
-        # TODO: add docstring
+        self.fit(W, verbose)
 
-        cost, A, B = self.fit(W, verbose)
-
-        return cost, A, B
+        return self.cost, self.A, self.B
