@@ -7,11 +7,11 @@ import numpy as np
 from bmdcluster.optimizers.blockdiagonalBMD import run_bd_BMD
 from bmdcluster.optimizers.generalBMD import run_BMD
 from bmdcluster.initializers.primary_initializer import initialize_clusters
-        
+
 
 class bmdcluster:
 
-    def __init__(self, n_clusters, method, B_ident, use_bootstrap = False,  **kwargs):
+    def __init__(self, n_clusters, method, B_ident, use_bootstrap = False,  b=None, init_ratio=1.0, f_clusters=None, seed=None):
 
         """Instantiates the :code:`bmdcluster` class with given parameters.
 
@@ -52,28 +52,37 @@ class bmdcluster:
         # TODO: create fit_transform method
         # TODO: create reverse lookup function that returns cluster given the data point
 
+        # check that if B_ident = False that f_clusters is set
+        # TODO: potentially move this to a shared function when splitting UI
+        if not B_ident:
+            assert f_clusters is not None
+
         self.n_clusters = n_clusters
         self.method = method
         self.use_bootstrap = use_bootstrap
-        self.keywords = {}
+        self.B_ident = B_ident
+        self.f_clusters = f_clusters
+        self.init_ratio = init_ratio
+        self.seed = seed
+        self.b = b
 
-        if use_bootstrap:
-            assert 'b' in kwargs
-            self.keywords['b'] = kwargs['b']
+        # if use_bootstrap:
+        #     assert 'b' in kwargs
+        #     self.keywords['b'] = kwargs['b']
 
-        if B_ident == False:
-            assert 'f_clusters' in kwargs
-            self.B_ident = False
-            self.keywords['f_clusters'] = kwargs['f_clusters']
-        else:
-            self.B_ident = True
+        # if B_ident == False:
+        #     assert 'f_clusters' in kwargs
+        #     self.B_ident = False
+        #     self.keywords['f_clusters'] = kwargs['f_clusters']
+        # else:
+        #     self.B_ident = True
 
-        # TODO: add assertion that is between zero and 1
-        if 'init_ratio' in kwargs:
-            self.keywords['init_ratio'] = kwargs['init_ratio']
+        # # TODO: add assertion that is between zero and 1
+        # if 'init_ratio' in kwargs:
+        #     self.keywords['init_ratio'] = kwargs['init_ratio']
 
-        if 'seed' in kwargs:
-            self.keywords['seed'] = kwargs['seed']
+        # if 'seed' in kwargs:
+        #     self.keywords['seed'] = kwargs['seed']
 
 
 
@@ -111,7 +120,10 @@ class bmdcluster:
                                              n_clusters = self.n_clusters,
                                              use_bootstrap = self.use_bootstrap,
                                              B_ident = self.B_ident,
-                                             **self.keywords)
+                                             b=self.b,
+                                             init_ratio=self.init_ratio,
+                                             seed=self.seed,
+                                             f_clusters=self.f_clusters)
 
 
         # Run BMD algorithm.
