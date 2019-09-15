@@ -35,14 +35,11 @@ def initialize_clusters(W, method, n_clusters, b=None, f_clusters=None, init_rat
     
     Raises
     ------
-    ValueError
-        Raised of 'b' is None and 'use_bootstrap' is True
+    AssertionError
+        'method' must be either 'block_diagonal' or 'general'
     """
 
     assert method in ['block_diagonal', 'general']
-
-    if use_bootstrap and not b:
-        raise ValueError("Must specify keyword argument 'b' when using bootstrapping.")
 
     n, m = W.shape
 
@@ -71,7 +68,6 @@ def initialize_clusters(W, method, n_clusters, b=None, f_clusters=None, init_rat
         return A_init, None
         
     else:
-
         if use_bootstrap:
 
             boot = initialize_bootstrapped_clusters(W=W, 
