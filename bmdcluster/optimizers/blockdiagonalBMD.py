@@ -206,8 +206,6 @@ def run_bd_BMD(A,W, max_iter=100, verbose=False):
     
     B = _bd_updateB(A,W)
     O_old = _bd_objective(A, B, W)
-    
-    if verbose: print(O_old)
 
     n_iter = 0
 
@@ -217,10 +215,13 @@ def run_bd_BMD(A,W, max_iter=100, verbose=False):
         O_new = _bd_objective(A,B,W)
         if O_new < O_old:
             O_old = O_new
-            if verbose and n_iter % 10 == 0: 
+            if verbose:
                 print(ITER_MESSAGE.format(n_iter, O_new))
             n_iter += 1
         else:
             break
+
+    if verbose:
+        print("Convergence reached after {0} iterations".format(n_iter))
         
     return O_new, A, B
