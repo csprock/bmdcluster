@@ -31,29 +31,13 @@ General Nomenclature:
 ITER_MESSAGE = "Iteration: {0} ............. Cost: {1:.3f}"
 
 
-
-# Computes the objective function for the general BMD algorithm.
 def _objective(A,B,X,W):
-    # TODO: better docstring
+    """ Computes the objective function for the general BMD algorithm. """
     return np.linalg.norm(W - np.dot(A, np.dot(X,B.T)))
 
 
-# computing X given A, B #
-
-#def updateX(A,B,W):
-#    p = A.sum(axis = 0)
-#    q = B.sum(axis = 0)
-#    
-#    X_new = (1 / np.outer(p,q))*np.dot(A.T, np.dot(W,B))
-#    return X_new
-
-
-
-# Computes updated cluster relation matrix X given A,B,W.
 def _updateX(A,B,W):
-    # TODO: better docstring
-    """
-    Updates the cluster centroid matrix X according to Equation 5 in Li (2005).
+    """Updates the cluster centroid matrix X given A,B, and W according to Equation 5 in Li (2005).
     
     The kc-th entry of X is the sum of the entries of W in the kth data cluster and cth feature cluster 
     normalized by the product of the cluster sizes and can be thought of as cluster centroids.
@@ -61,16 +45,19 @@ def _updateX(A,B,W):
     
     Parameters
     ----------
-    A: data cluster assignment matrix
-    B: feature cluster assignment matrix
-    W: data matrix
+    A : np.array
+        old data cluster assignment matrix
+    B : np.array
+        old feature cluster assignment matrix
+    W : np.array
+        data matrix
     
     Returns
     -------
-    X_new: numpy.ndarray
-        NumPy array of size K x C.
-    
+    np.array
+        updated cluster correspondence matrix X
     """
+
     # Compute number of points in each data cluster by summing the rows of A.
     p = A.sum(axis = 0)
     # Compute number of points in each feature cluster by rumming rows of B. 
@@ -84,35 +71,8 @@ def _updateX(A,B,W):
     return X_new
 
 
-############ computing A given X, B #############
-
-#def T_matrix(indices, W,X):
-#    i, k = indices
-#    
-#    m = W.shape[1]
-#    c = X.shape[1]
-#    
-#    wi = W[i,:]
-#    w_temp = np.tile(wi, (c, 1))
-#    
-#    xk = X[k, :]
-#    xk.shape = (xk.shape[0], 1)
-#    x_temp = np.tile(xk, (1, m))
-#    
-#    T = w_temp - x_temp
-#    return np.square(T)
-#
-#def m_ik(indices, W,X,B):
-#    T = T_matrix(indices, W,X)
-#    return np.trace(np.dot(T,B))
-
-
-
-
-def _m_ik(indices,W,X,B):
-    # TODO: better docstring
-    """
-    The data cluster indicator matrix A is updated using Formula 6 in Li (2005), which uses 
+def _m_ik(indices, W, X, B):
+    """The data cluster indicator matrix A is updated using Formula 6 in Li (2005), which uses 
     an 'affiliation score' that can be thought of as a distance between the i-th point and
     the center of the k-th data cluster. The point is then assigned to the cluster with the
     lowest score. 
@@ -124,17 +84,21 @@ def _m_ik(indices,W,X,B):
     
     Parameters
     ----------
-    indices: tuple
-        indices[0] index of data point
-        indices[1] index of data cluster
-    W: data matrix
-    X: cluster centroid matrix
-    B: feature cluster assignment matrix
+    indices : tuple
+        (index of data point, index of data cluster)
+    W : np.array
+        data matrix
+    X : np.array
+        cluster centroid matrix
+    B : np.array
+        feature cluster assignment matrix
     
     Returns
     -------
-    m_ik: float
+    float
+        affiliation score between the ith data point and the kth cluster
     """
+
     
     i, k = indices # get indices
 
@@ -146,39 +110,54 @@ def _m_ik(indices,W,X,B):
     # B[:,c] - cth column of B
     
     # sum over the feature clusters C
-    for c in range(C):  m_ik += np.dot(np.square(W[i,:] - X[k,c]), B[:,c])
+    for c in range(C):  
+        m_ik += np.dot(np.square(W[i,:] - X[k,c]), B[:,c])
+
     return m_ik
     
 
-# Check if the minimum value in 1d array appears more than once. 
 def _min_dupes(r):
-    # TODO: better docstring
+    """Check if the minimum value in 1d array appears more than once. 
+    
+    Parameters
+    ----------
+    r : np.array
+        1d array
+    
+    Returns
+    -------
+    bool
+        did the minimum value appear more than once
+    """
     if len(np.argwhere(r == np.argmin(r))) > 1:
         return True
     else:
         return False
 
 
-# Update the data cluster indicator matrix A. 
 def _updateA(A,B,X,W):
-    # TODO: better docstring
-    """
-    Updates the matrix A by creating a matrix M of identical dimensions whose elements are 'affiliation scores'.
+    """Updates the matrix A by creating a matrix M of identical dimensions whose elements are 'affiliation scores'.
     For each row, a 1 is placed in the position of the smallest entry and the rest set to 0's. In the case
     of ties, the entire row is set to 0 following the convention set in Li and Zhu (2005) who term such 
     cases 'outliers'. 
     
     Parameters
     ----------
-    A: data cluster indicator matrix
-    B: feature cluster indicator matrix
-    X: cluster centroid matrix
-    W: data matrix
+    A : np.array
+        old data cluster assignment matrix
+    B : np.array
+        old data feature assignment matrix
+    X : np.array
+        old cluster centroid matrix
+    W : np.array
+        data matrix
     
     Returns
     -------
-    M: new data cluster matrix A
+    np.array
+        new data cluster assignment matrix
     """
+
     
     n, K = A.shape
     A_new = np.zeros((n,K))
@@ -228,9 +207,7 @@ def _updateA(A,B,X,W):
 
 
 def _r_jc(indices, W, X, A):
-    # TODO: better docstring
-    """
-    The feature cluster indicator matrix B is updated according to Formula 7 in Li (2005), which 
+    """ The feature cluster indicator matrix B is updated according to Formula 7 in Li (2005), which 
     uses an 'affiliation score' of the same form as that used to update A. The feature is assigned
     to the cluster with the lowest score. 
     
@@ -239,21 +216,23 @@ def _r_jc(indices, W, X, A):
     
         r[j,c] = SUM_{k} [ A[:,k]'(W[:,j] - X[k,c]) ]^2
     
-    
     Parameters
     ----------
-    indices: tuple
-        indices[0] index of feature
-        indices[1] index of feature cluster
-    W: data matrix
-    X: cluster centroid matrix
-    A: data cluster indicator matrix
+    indices : tuple
+        (index of feature, index of feature cluster)
+    W : np.array
+        data matrix
+    X : np.array
+        cluster centroid matrix
+    A : np.array
+        data cluster indicator matrix
     
     Returns
     -------
-    r_jc: float
-    
-    """    
+    float
+        affiliation score for the jth feature in the cth cluster
+    """
+
     j, c = indices
     
     K = X.shape[0]
@@ -264,33 +243,35 @@ def _r_jc(indices, W, X, A):
     # X[k,c] - kc-th entry of X (kc-th centriod)
     # A[:,k] - kth column of A
     
-    for k in range(K): r_jc += np.dot(A[:,k].T, np.square(W[:,j] - X[k,c]))
+    for k in range(K): 
+        r_jc += np.dot(A[:,k].T, np.square(W[:,j] - X[k,c]))
         
     return r_jc
 
     
-
-
 def _updateB(A,B,X,W):
-    # TODO: better docstring
-    """
-    Updates the matrix B by creating a matrix M of identical dimensions whose elements are 'affiliation scores'.
+    """Updates the matrix B by creating a matrix M of identical dimensions whose elements are 'affiliation scores'.
     For each row, a 1 is placed in the position of the smallest entry and the rest set to 0's. In the case
     of ties, the entire row is set to 0 following the convention set in Li and Zhu (2005) who term such 
     cases 'outliers'. 
     
     Parameters
     ----------
-    A: data cluster indicator matrix
-    B: feature cluster indicator matrix
-    X: cluster centroid matrix
-    W: data matrix
+    A : np.array
+        old data cluster indicator matrix
+    B : np.array
+        old feature cluster indicator matrix
+    X : np.array
+        old cluster centroid matrix
+    W : np.array
+        data matrix
     
     Returns
     -------
-    B_new: new data cluster matrix B
-    
+    np.array
+        new feature cluster assignment matrix B
     """
+
     
     m, C = B.shape
     B_new = np.zeros((m,C))
@@ -314,26 +295,32 @@ def _updateB(A,B,X,W):
     return B_new
 
 
-# TODO: better docstring
 def run_BMD(A,B,W, max_iter=100, verbose = 1):
-    """
-    Executes clustering Algorithm 1 from Li (2005). 
+    """Executes clustering Algorithm 1 from Li (2005). 
     
     Parameters
     ----------
-    A: initial data cluster assignment matrix
-    B: initial feature cluster assignment matrix
-    W: binary data matrix
-    verbose: logical flag to print progress to console each iteration
+    A : np.array
+        initial data cluster matrix
+    B : np.array
+        initial feature cluster matrix
+    W : np.array
+        binary data matrix
+    max_iter : int, optional
+        maximum number of algorithm iterations, by default 100
+    verbose : int, optional
+        print loss function and progress, by default 1
     
     Returns
     -------
-    O_new: the minimal value of the objective function after algorithm's completion
-    A: final data cluster assignment matrix
-    B: final feature cluster assignment matrix
-    
+    float
+        final value of cost function
+    np.array
+        final data cluster matrix
+    np.array
+        final feature cluster matrix
     """
-    
+
     
     X = _updateX(A,B,W)
     O_old = _objective(A, B, X, W)
@@ -361,3 +348,48 @@ def run_BMD(A,B,W, max_iter=100, verbose = 1):
 
 # def get_indices(A, j):
 #     return np.where(A[:,j] == 1)
+
+# deprecated implementations of updateA and updateB
+############ computing A given X, B #############
+
+#def T_matrix(indices, W,X):
+#    i, k = indices
+#    
+#    m = W.shape[1]
+#    c = X.shape[1]
+#    
+#    wi = W[i,:]
+#    w_temp = np.tile(wi, (c, 1))
+#    
+#    xk = X[k, :]
+#    xk.shape = (xk.shape[0], 1)
+#    x_temp = np.tile(xk, (1, m))
+#    
+#    T = w_temp - x_temp
+#    return np.square(T)
+#
+#def m_ik(indices, W,X,B):
+#    T = T_matrix(indices, W,X)
+#    return np.trace(np.dot(T,B))
+
+################ update B given A, X ##################
+
+#def S_matrix(indices, W, X):
+#    j, c = indices
+#    
+#    n = W.shape[0]
+#    k = X.shape[0]
+#    
+#    wj = W[:,j]
+#    wj.shape = (wj.shape[0], 1)
+#    w_temp = np.tile(wj, (1, k))
+#    
+#    xc = X[:,c]
+#    x_temp = np.tile(xc, (n,1))
+#    
+#    S = w_temp - x_temp
+#    return np.square(S)
+#    
+#def r_jc(indices, W,X,A):
+#    S = S_matrix(indices, W,X)
+#    return np.trace(np.dot(A.T, S))   

@@ -29,15 +29,12 @@ General Nomenclature:
 ITER_MESSAGE = "Iteration: {0} ............. Cost: {1:.3f}"
 
 def _bd_objective(A,B,W):
-    # TODO: better docstring
     """ Objective function for block diagonal variation of BMD."""
     return np.linalg.norm(W - np.dot(A, B.T))
     
 
 def _d_ik(i, W, B):
-    # TODO: better docstring
-    """
-    The data cluster matrix A is updated using formula 10 from Li (2005) which is the same as 
+    """ The data cluster matrix A is updated using formula 10 from Li (2005) which is the same as 
     formula 2.3 in Li & Zhu (2005). The formula uses the squared distance between ith point and 
     the kth cluster. The point is then assigned to the closest cluster. The squared distance
     between point i and data cluster k is computed by summing over the element-wise differences
@@ -45,19 +42,21 @@ def _d_ik(i, W, B):
     
         d[i,k] = SUM_{j in features} (W[i,j] - B[k,j])^2j
     
-    
     Parameters
     ----------
-    i: index of data point
-    W: binary data matrix
-    B: feature cluster assignment matrix
+    i : int
+        infdex of data point
+    W : np.array
+        binary data matrix
+    B : np.array
+        feature cluster assignment matrix
     
     Returns
     -------
-    assigned_cluster: int
-        index of the assigned cluster
-        
+    int
+        index of assigned cluster
     """
+
     # Vectorized implementation to compute summations found in formula 10. 
     Di = W[i,:].reshape((W.shape[1],1)) - B           # broadcast i-th row of W across columns of B
     Di = Di*Di                                        
@@ -79,21 +78,23 @@ def _d_ik(i, W, B):
 #########################
 
 def _bd_updateA(A,B,W):
-    # TODO: better docstring
-    """
-    Update data cluster assignment matrix A using formula 10 in Li (2005). 
+    """Update data cluster assignment matrix A using formula 10 in Li (2005). 
     
     Parameters
     ----------
-    A: data cluster indicator matrix
-    B: feature cluster indicator matrix
-    W: binary data matrix
+    A : np.array
+        old data cluster matrix
+    B : np.array
+        old feature cluster matrix
+    W : np.array
+        binary data matrix
     
     Returns
     -------
-    A_new: updated data cluster matrix
-    
+    np.array
+        updated data cluster matrix
     """
+
     n, K = A.shape
     A_new = np.zeros((n,K))
     
@@ -102,13 +103,8 @@ def _bd_updateA(A,B,W):
     return A_new
 
 
-
-
-
 def _Y(A, W):
-    # TODO: better docstring
-    """
-    The feature cluster matrix B is updated using formula 11 from Li (2005). This is done
+    """ The feature cluster matrix B is updated using formula 11 from Li (2005). This is done
     by computing a 'probability matrix' Y where the kj-th entry represents the probability
     feature j is in the k-th cluster. The updated matrix B is the same shape as Y and contains
     1's where the corresponding entry of Y is greater than or equal to 1/2 and 0's elsewhere. 
@@ -121,38 +117,48 @@ def _Y(A, W):
         y[i,j] = (1/n_k)*SUM_{i in data} a[i,k]*w[i,j] = (1/n_k)*( a[:,k]'w[:,j] )
         n_k = number of points in cluster k
     
+    Parameters
+    ----------
+    A : np.array
+        data cluster matrix
+    W : np.array
+        data matrix
+    
+    Returns
+    -------
+    np.array
+        probability matrix
     """
+
     n_k = A.sum(axis = 0)                 # Compute number of points in each cluster.
     n_k[np.where(n_k == 0)[0]] = np.inf   # Set zero entries to inf to zero out reciprocal. 
     r = 1 / n_k                           # Compute reciprocal. 
     r.shape = (A.shape[1],1)              # Reshape for broadcasting. 
 
-    
     return np.dot(A.T, W)*r                  # Compute Y matrix as dot product matrix of rows of A and W. 
 
 
-
 def _bd_updateB(A,W):
-    # TODO: better docstring
-    """
-    Updated feature cluster matrix B. Applies the _Y() and B set to the matrix the same shape
+    """ Updated feature cluster matrix B. Applies the _Y() and B set to the matrix the same shape
     as Y but with 1's in the entries corresponding to where Y[>=0.5] and 0's elsewhere.
     
     Features that are associated with all clusters are 'outliers' (have a row whose entries >=0.5 in Y)
     Following Li and Zhu are not assigned to any clusters by setting all entries in B associated with those
     features to 0. 
-        
     
     Parameters
     ----------
-    A: data cluster indicator matrix
-    W: binary data matrix
+    A : np.array
+        old data cluster matrix
+    W : np.array
+        data matrix
     
     Returns
     -------
-    B_new: updated feature cluster indicator matrix
-    
+    np.array
+        new feature cluster matrix
     """
+
     
     Y = _Y(A, W)
     B_new = np.greater_equal(Y, 0.5).T    # Update B matrix. 
@@ -170,30 +176,31 @@ def _bd_updateB(A,W):
     
     B_new = np.apply_along_axis(is_outlier, axis = 1, arr = B_new)
     
-    
-    
     return B_new
     
 
-
-# TODO: better docstring
-def run_bd_BMD(A,W, max_iter=100, verbose=1):
-    
-    """
-    Executes clustering Algorithm 2 from Li (2005). 
+def run_bd_BMD(A,W, max_iter=100, verbose=False):
+    """Executes clustering Algorithm 2 from Li (2005). 
     
     Parameters
     ----------
-    A: initial data cluster assignment matrix
-    W: binary data matrix
-    verbose: logical flag to print progress to console each iteration
+    A : np.array
+        initial data cluster assignment matrix
+    W : np.array
+        binary data matrix
+    max_iter : int, optional
+        maximum number of algorithm iterations, by default 100
+    verbose : bool, optional
+        print progress and objective function value, by default False
     
     Returns
     -------
-    O_new: the minimal value of the objective function after algorithm's completion
-    A: final data cluster assignment matrix
-    B: final feature cluster assignment matrix
-    
+    float
+        final value of objective function
+    np.array
+        final data cluster matrix
+    np.array
+        final feature cluster matrix
     """
     
     
