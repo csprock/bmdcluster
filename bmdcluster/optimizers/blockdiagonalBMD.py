@@ -31,6 +31,29 @@ ITER_MESSAGE = "Iteration: {0} ............. Cost: {1:.3f}"
 def _bd_objective(A,B,W):
     """ Objective function for block diagonal variation of BMD."""
     return np.linalg.norm(W - np.dot(A, B.T))
+
+
+def _is_bd_outlier(B):
+    """Determines if a feature is an outlier if it is equally associated 
+    with each cluster. This is checked by seeing if all the entries in a 
+    given row of the candidate feature cluster association matrix are 1's. 
+    Any rows that meet these conditions are set to 0. (see Li and Zhu)
+
+    Parameters
+    ----------
+    B : np.array
+        candidate feature cluster assignment matrix
+    
+    Returns
+    -------
+    np.array
+        feature cluster assignment matrix
+    """
+
+    i = np.where(np.sum(B, axis=1) == B.shape[1])[0]
+    B[i, :] = 0
+    
+    return B
     
 
 def _d_ik(i, W, B):
@@ -98,7 +121,8 @@ def _bd_updateA(A,B,W):
     n, K = A.shape
     A_new = np.zeros((n,K))
     
-    for i in range(n): A_new[i,:], A_new[i, _d_ik(i, W, B)] = 0, 1
+    for i in range(n): 
+        A_new[i,:], A_new[i, _d_ik(i, W, B)] = 0, 1
     
     return A_new
 
@@ -167,14 +191,17 @@ def _bd_updateB(A,W):
     # if feature has similar associate to all clusters, is an outlier (see Li and Zhu)
     # will have a row of all True by the np.greater_equal() function, reverse to make row of False
     
-    def is_outlier(d):
+    # # TODO: use single outlier function and create a shared utils.py 
+    # def is_outlier(d):
         
-        if np.array_equal(d, np.array([True]*len(d))):
-            return np.array([False]*len(d))
-        else:
-            return d
+    #     if np.array_equal(d, np.array([True]*len(d))):
+    #         return np.array([False]*len(d))
+    #     else:
+    #         return d
     
-    B_new = np.apply_along_axis(is_outlier, axis = 1, arr = B_new)
+    # B_new = np.apply_along_axis(is_outlier, axis = 1, arr = B_new)
+
+    B_new = _is_bd_outlier(B_new)
     
     return B_new
     

@@ -36,6 +36,25 @@ def _objective(A,B,X,W):
     return np.linalg.norm(W - np.dot(A, np.dot(X,B.T)))
 
 
+def _is_outlier(M):
+    """Determines if a point is an outlier if the affiliation scores between
+    a feature/data point and a cluster are all the same. Done by checking
+    if all entries in a row of the affiliation score matrix are equal. Returns
+    a 1D numpy boolean array indicating if that point is an outlier
+    
+    Parameters
+    ----------
+    M : np.array
+        cluster affiliation matrix for features or data points
+    
+    Returns
+    -------
+    np.array
+        1D boolean array
+    """
+    return np.apply_along_axis(lambda x: len(x) == np.sum(x == np.min(x)), axis=1, arr=M)
+
+
 def _updateX(A,B,W):
     """Updates the cluster centroid matrix X given A,B, and W according to Equation 5 in Li (2005).
     
@@ -116,25 +135,6 @@ def _m_ik(indices, W, X, B):
     return m_ik
     
 
-def _min_dupes(r):
-    """Check if the minimum value in 1d array appears more than once. 
-    
-    Parameters
-    ----------
-    r : np.array
-        1d array
-    
-    Returns
-    -------
-    bool
-        did the minimum value appear more than once
-    """
-    if len(np.argwhere(r == np.argmin(r))) > 1:
-        return True
-    else:
-        return False
-
-
 def _updateA(A,B,X,W):
     """Updates the matrix A by creating a matrix M of identical dimensions whose elements are 'affiliation scores'.
     For each row, a 1 is placed in the position of the smallest entry and the rest set to 0's. In the case
@@ -169,8 +169,8 @@ def _updateA(A,B,X,W):
     
     # Compute cluster assignments by taking argmin of each row. 
     cluster_assignments = A_new.argmin(axis = 1)
-    # Apply min_dupes() to the rows of A_new. 
-    is_outlier = np.apply_along_axis(_min_dupes, axis = 1, arr = A_new)
+    # find outliers
+    is_outlier = _is_outlier(A_new)
     
     # Fill in new cluster indicator matrix A. 
     for i, q in enumerate(cluster_assignments):
@@ -280,11 +280,11 @@ def _updateB(A,B,X,W):
         for c in range(C):               # iterate over columns (clusters)
             B_new[j,c] = _r_jc((j,c), W,X,A)
             
-
+    print(B_new)
     # Compute cluster assignments by taking argmin of each row. 
     cluster_assignments = B_new.argmin(axis = 1)
-    # Apply min_dupes() to the rows of B_new.
-    is_outlier = np.apply_along_axis(_min_dupes, axis = 1, arr = B_new)
+    # find outliers
+    is_outlier = _is_outlier(B_new)
     
     for i, q in enumerate(cluster_assignments):
         if is_outlier[i]:                  # Set row to 0's if outlier. 
