@@ -22,22 +22,17 @@ class _BMD:
         non_outlier_labels = M[~outliers, :].argmax(axis=1)
         labels[~outliers] = non_outlier_labels
 
-        return _labels
-
+        return labels
 
 class blockdiagonalBMD(_BMD):
 
-    def __init__(self, n_clusters, f_clusters=None, B_ident=True, max_iter=100, use_bootstrap=False, b=None, init_ratio=1.0, seed=None):
+    def __init__(self, n_clusters, max_iter=100, use_bootstrap=False, b=None, init_ratio=1.0, seed=None):
         """Run the block-diagonal form of the BMD algorithm. 
         
         Parameters
         ----------
         n_clusters : int
             number of data clusters
-        f_clusters : int, optional
-            number of feature clusters, by default None
-        B_ident : bool, optional
-            initialize feature cluster assignment matrix to the identity, by default True
         max_iter : int, optional
             maximum number of optimization iterations, by default 100
         use_bootstrap : bool, optional
@@ -62,15 +57,10 @@ class blockdiagonalBMD(_BMD):
         if use_bootstrap and not b:
             raise ValueError("Must specify keyword argument 'b' when using bootstrapping.")
 
-        if not B_ident and not f_clusters:
-            raise ValueError("You must one of either 'B_ident' or 'f_clusters'")
-
         self.n_clusters = n_clusters
-        self.B_ident = B_ident
         self.use_bootstrap = use_bootstrap
         self.b = b
         self.init_ratio = init_ratio
-        self.f_clusters = f_clusters
         self.seed = seed
         self.max_iter = max_iter
 
@@ -95,11 +85,11 @@ class blockdiagonalBMD(_BMD):
                                              method = 'block_diagonal',
                                              n_clusters = self.n_clusters,
                                              use_bootstrap = self.use_bootstrap,
-                                             B_ident = self.B_ident,
+                                             B_ident = None,
                                              b=self.b,
                                              init_ratio=self.init_ratio,
                                              seed=self.seed,
-                                             f_clusters=self.f_clusters)
+                                             f_clusters=None)
 
         self.cost, self.A, self.B = run_bd_BMD(self.A, self.W, self.max_iter, verbose)
 
