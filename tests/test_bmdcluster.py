@@ -39,7 +39,6 @@ class TestBMD_bd(unittest.TestCase):
 
 
         BMD_model = blockdiagonalBMD(n_clusters = self.C,
-                                B_ident = True,
                                 use_bootstrap = True,
                                 b = 5,
                                 seed = self.seed)
