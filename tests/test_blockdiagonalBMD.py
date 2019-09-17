@@ -49,11 +49,10 @@ class TestExampleDataset_BD(unittest.TestCase):
                                     [False, True],
                                     [False, False]])
             
-        
 
     def test_run_bd_BMD(self):
         
-        _, A, B = run_bd_BMD(self.A, self.W, verbose = 0)
+        _, A, B = run_bd_BMD(self.A, self.W, verbose = False)
         
         with self.subTest():
             self.assertTrue(np.array_equal(A, self.expected_A))
@@ -76,8 +75,6 @@ class TestExampleDataset_BD(unittest.TestCase):
     def test_bd_updateA(self):
         self.assertTrue(np.array_equal(self.expected_A, _bd_updateA(self.A, self.step_B, self.W)))
 
-
-
     
 class IdentityTests_BD(unittest.TestCase):
     
@@ -97,55 +94,6 @@ class IdentityTests_BD(unittest.TestCase):
         A = _bd_updateA(self.I, self.I, self.I)
         self.assertTrue(np.array_equal(self.I, A))
         
-        
-    
+
 if __name__ == '__main__':
     unittest.main()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#D = np.zeros((6,2))
-#D[4,1] = 1
-#D[1,0] = 1
-#D = pd.DataFrame(D)
-##run_clustering(D,X)
-#
-#W = pd.read_csv('C:/Users/csprock/Documents/Projects/BMD/general/zoo_data.csv')
-#W = W.values
-#
-#
-#A = np.zeros((30, 3))
-#for i in range(30):
-#    A[i, np.random.randint(0,3)] = 1
-#
-#
-#
-#B, Y = updateB(A,W)
-#A = updateA(A, B, W)
-#
-#
-#
-#run_BMD_bd(A,W,verbose = 1)
-#
-#
-#
-#A = np.ones((10,3))
-#B = np.ones((10,2))
-#C = np.ones((10,4))
-#
-#W = sp.linalg.block_diag(A,B,C)

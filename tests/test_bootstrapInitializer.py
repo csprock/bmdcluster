@@ -85,7 +85,5 @@ class TestboostrapInitializer(unittest.TestCase):
         self.assertEqual(expected_assignments, assign_bootstrapped_clusters(A_boot, x_rep, x_samp))
 
 
-
-
 if __name__ == '__main__':
     unittest.main()
