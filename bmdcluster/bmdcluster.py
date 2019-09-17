@@ -16,8 +16,13 @@ class _BMD:
 
     @staticmethod
     def _get_labels(M):
-        return M.argmax(axis=1)
 
+        labels = np.full(shape=(M.shape[0], ), fill_value=-1)
+        outliers = M.sum(axis=1) < 1
+        non_outlier_labels = M[~outliers, :].argmax(axis=1)
+        labels[~outliers] = non_outlier_labels
+
+        return _labels
 
 
 class blockdiagonalBMD(_BMD):
@@ -97,6 +102,28 @@ class blockdiagonalBMD(_BMD):
                                              f_clusters=self.f_clusters)
 
         self.cost, self.A, self.B = run_bd_BMD(self.A, self.W, self.max_iter, verbose)
+
+
+    def get_feature_labels(self):
+        """Get feature cluster labels after .fit()
+        
+        Returns
+        -------
+        np.array
+            feature cluster labels
+        """
+        return self._get_labels(self.B)
+
+    
+    def get_data_labels(self):
+        """Get data cluster labels after .fit()
+        
+        Returns
+        -------
+        np.array
+            data cluster labels
+        """
+        return self._get_labels(self.A)
 
 
     def fit_predict(self, W, verbose=False):
@@ -232,6 +259,27 @@ class generalBMD(_BMD):
 
         self.cost, self.A, self.B = run_BMD(self.A, self.B, self.W, self.max_iter, verbose)
 
+
+    def get_feature_labels(self):
+        """Get feature cluster labels after .fit()
+        
+        Returns
+        -------
+        np.array
+            feature cluster labels
+        """
+        return self._get_labels(self.B)
+
+    
+    def get_data_labels(self):
+        """Get data cluster labels after .fit()
+        
+        Returns
+        -------
+        np.array
+            data cluster labels
+        """
+        return self._get_labels(self.A)
 
 
     def fit_predict(self, W, verbose=False):
