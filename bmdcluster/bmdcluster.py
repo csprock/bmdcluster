@@ -202,6 +202,12 @@ class generalBMD(_BMD):
             If :code:`use_bootstrap` is set to True but and :code:`b` is not specified
         ValueError
             If both :code:`B_ident` and :code:`f_clusters` are not specified
+
+        Caution
+        -------
+        If both :code:`B_ident=True` and :code:`f_clusters` is set, the program will
+        default to using :code:`B_ident`
+
         """
 
         if use_bootstrap and not b:

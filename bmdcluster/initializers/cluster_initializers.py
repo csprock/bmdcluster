@@ -2,7 +2,7 @@
 
 import numpy as np
 
-# TODO: add warning for B_ident=True and f_clusters not None
+
 def initialize_B(m, B_ident=False, f_clusters=None, seed=None):
     """This function initializes the feature cluster indicator matrix B. There are two initialization options.
     The first option places each each feature in its own cluster, so B is initialized to the identity matrix.
@@ -43,7 +43,7 @@ def initialize_B(m, B_ident=False, f_clusters=None, seed=None):
         np.random.seed(seed)
 
         B_init = np.zeros((m, f_clusters))
-        for i in range(f_clusters):  # TODO: make for loop over m
+        for i in range(m):
             B_init[i, np.random.randint(f_clusters)] = 1
 
         np.random.seed(None)
