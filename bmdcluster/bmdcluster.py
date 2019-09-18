@@ -6,7 +6,9 @@ import numpy as np
 
 from bmdcluster.optimizers.blockdiagonalBMD import run_bd_BMD
 from bmdcluster.optimizers.generalBMD import run_BMD
-from bmdcluster.initializers.primary_initializer import initialize_clusters
+from bmdcluster.initializers.primary_initializer import initialize_general
+from bmdcluster.initializers.primary_initializer import initialize_block_diagonal
+
 
 
 class _BMD:
@@ -81,15 +83,12 @@ class blockdiagonalBMD(_BMD):
         self.W = W
 
         # Initialize cluster indicator matrices.
-        self.A, self.B = initialize_clusters(W=self.W, 
-                                             method = 'block_diagonal',
+        self.A = initialize_block_diagonal(W=self.W, 
                                              n_clusters = self.n_clusters,
                                              use_bootstrap = self.use_bootstrap,
-                                             B_ident = None,
                                              b=self.b,
                                              init_ratio=self.init_ratio,
-                                             seed=self.seed,
-                                             f_clusters=None)
+                                             seed=self.seed)
 
         self.cost, self.A, self.B = run_bd_BMD(self.A, self.W, self.max_iter, verbose)
 
@@ -237,8 +236,7 @@ class generalBMD(_BMD):
         self.W = W
 
         # Initialize cluster indicator matrices.
-        self.A, self.B = initialize_clusters(W=self.W, 
-                                             method = 'general',
+        self.A, self.B = initialize_general(W=self.W, 
                                              n_clusters = self.n_clusters,
                                              use_bootstrap = self.use_bootstrap,
                                              B_ident = self.B_ident,

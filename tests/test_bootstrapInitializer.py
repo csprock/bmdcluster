@@ -3,8 +3,8 @@ import numpy as np
 
 from bmdcluster.initializers.bootstrap_initializer import bootstrap_data
 from bmdcluster.initializers.bootstrap_initializer import assign_bootstrapped_clusters
-from bmdcluster.initializers.bootstrap_initializer import initialize_bootstrapped_clusters
-
+from bmdcluster.initializers.bootstrap_initializer import initialize_bootstrapped_clusters_general
+from bmdcluster.initializers.bootstrap_initializer import initialize_bootstrapped_clusters_block_diagonal
 
 class TestboostrapInitializer(unittest.TestCase):
 
@@ -24,13 +24,13 @@ class TestboostrapInitializer(unittest.TestCase):
 
 
         with self.subTest('Test output type and length using general method'):
-            output = initialize_bootstrapped_clusters(W=self.W, n_clusters=self.K, method='general', B_ident=True, b=5, seed=self.seed)
+            output = initialize_bootstrapped_clusters_general(W=self.W, n_clusters=self.K, B_ident=True, f_clusters=None, b=5, seed=self.seed)
             self.assertTrue(isinstance(output, list))
             self.assertEqual(len(output), 5)
 
 
         with self.subTest('Test output type and length using block diagonal method'):
-            output = initialize_bootstrapped_clusters(W=self.W, n_clusters=self.K, method='block_diagonal', B_ident=True, b=5, seed=self.seed)
+            output = initialize_bootstrapped_clusters_block_diagonal(W=self.W, n_clusters=self.K, b=5, seed=self.seed)
             self.assertTrue(isinstance(output, list))
             self.assertEqual(len(output), 5)
 
