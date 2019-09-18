@@ -1,8 +1,11 @@
 import unittest
 import numpy as np
 
-from bmdcluster.bmdcluster import blockdiagonalBMD
-from bmdcluster.bmdcluster import generalBMD
+
+from .context import bmdcluster
+
+# from bmdcluster import blockdiagonalBMD
+# from bmdcluster import generalBMD
 
 
 class TestBMD_bd(unittest.TestCase):
@@ -38,7 +41,7 @@ class TestBMD_bd(unittest.TestCase):
 
 
 
-        BMD_model = blockdiagonalBMD(n_clusters = self.C,
+        BMD_model = bmdcluster.blockdiagonalBMD(n_clusters = self.C,
                                 use_bootstrap = True,
                                 b = 5,
                                 seed = self.seed)
@@ -87,7 +90,7 @@ class TestBMD_general(unittest.TestCase):
             B_expected[i,c[j]*2] = True
 
 
-        BMD_model = generalBMD(n_clusters = self.C,
+        BMD_model = bmdcluster.generalBMD(n_clusters = self.C,
                                 B_ident = True,
                                 use_bootstrap = False,
                                 seed = self.seed)

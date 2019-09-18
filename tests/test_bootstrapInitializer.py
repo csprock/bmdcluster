@@ -1,10 +1,11 @@
 import unittest
 import numpy as np
 
-from bmdcluster.initializers.bootstrap_initializer import bootstrap_data
-from bmdcluster.initializers.bootstrap_initializer import assign_bootstrapped_clusters
-from bmdcluster.initializers.bootstrap_initializer import initialize_bootstrapped_clusters_general
-from bmdcluster.initializers.bootstrap_initializer import initialize_bootstrapped_clusters_block_diagonal
+from .context import bootstrap_initializer
+# from bmdcluster.bmdcluster.initializers.bootstrap_initializer import bootstrap_data
+# from bmdcluster.bmdcluster.initializers.bootstrap_initializer import assign_bootstrapped_clusters
+# from bmdcluster.bmdcluster.initializers.bootstrap_initializer import initialize_bootstrapped_clusters_general
+# from bmdcluster.bmdcluster.initializers.bootstrap_initializer import initialize_bootstrapped_clusters_block_diagonal
 
 class TestboostrapInitializer(unittest.TestCase):
 
@@ -24,13 +25,13 @@ class TestboostrapInitializer(unittest.TestCase):
 
 
         with self.subTest('Test output type and length using general method'):
-            output = initialize_bootstrapped_clusters_general(W=self.W, n_clusters=self.K, B_ident=True, f_clusters=None, b=5, seed=self.seed)
+            output = bootstrap_initializer.initialize_bootstrapped_clusters_general(W=self.W, n_clusters=self.K, B_ident=True, f_clusters=None, b=5, seed=self.seed)
             self.assertTrue(isinstance(output, list))
             self.assertEqual(len(output), 5)
 
 
         with self.subTest('Test output type and length using block diagonal method'):
-            output = initialize_bootstrapped_clusters_block_diagonal(W=self.W, n_clusters=self.K, b=5, seed=self.seed)
+            output = bootstrap_initializer.initialize_bootstrapped_clusters_block_diagonal(W=self.W, n_clusters=self.K, b=5, seed=self.seed)
             self.assertTrue(isinstance(output, list))
             self.assertEqual(len(output), 5)
 
@@ -39,7 +40,7 @@ class TestboostrapInitializer(unittest.TestCase):
 
         with self.subTest('Test assert b<=N'):
             with self.assertRaises(AssertionError):
-                bootstrap_data(N=1, b=2)
+                bootstrap_initializer.bootstrap_data(N=1, b=2)
 
 
         # with self.subTest('Test missing keyword b assertion'):
@@ -51,7 +52,7 @@ class TestboostrapInitializer(unittest.TestCase):
 
         with self.subTest('Test output sizes'):
 
-            x_samp, x_rep = bootstrap_data(10, b = 5)
+            x_samp, x_rep = bootstrap_initializer.bootstrap_data(10, b = 5)
 
             self.assertEqual(5, len(x_samp))
             self.assertEqual(10, len(x_rep))
@@ -62,7 +63,7 @@ class TestboostrapInitializer(unittest.TestCase):
             expected_samp = np.array([3,0])
             expected_rep = np.array([3,3,3,3])
 
-            x_samp, x_rep = bootstrap_data(4, b = 2, seed = self.seed)
+            x_samp, x_rep = bootstrap_initializer.bootstrap_data(4, b = 2, seed = self.seed)
 
             self.assertTrue(np.array_equal(expected_samp, x_samp))
             self.assertTrue(np.array_equal(expected_rep, x_rep))
@@ -72,7 +73,7 @@ class TestboostrapInitializer(unittest.TestCase):
 
         # Check that output of bootstrapped_clusters is the same as that of known example.
 
-        x_samp, x_rep = bootstrap_data(15, b = 5, seed = self.seed)
+        x_samp, x_rep = bootstrap_initializer.bootstrap_data(15, b = 5, seed = self.seed)
         actual_clusters = [1,2,0,0,1]
         expected_assignments = list(zip(list(x_samp), actual_clusters))
 
@@ -82,7 +83,7 @@ class TestboostrapInitializer(unittest.TestCase):
                 if j[0] == i: A_boot[k,j[1]] = 1
 
 
-        self.assertEqual(expected_assignments, assign_bootstrapped_clusters(A_boot, x_rep, x_samp))
+        self.assertEqual(expected_assignments, bootstrap_initializer.assign_bootstrapped_clusters(A_boot, x_rep, x_samp))
 
 
 if __name__ == '__main__':

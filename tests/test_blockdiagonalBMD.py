@@ -1,11 +1,14 @@
 import unittest
 import numpy as np
 
-from bmdcluster.optimizers.blockdiagonalBMD import run_bd_BMD
-from bmdcluster.optimizers.blockdiagonalBMD import _bd_updateB
-from bmdcluster.optimizers.blockdiagonalBMD import _bd_updateA
-from bmdcluster.optimizers.blockdiagonalBMD import _d_ik
-from bmdcluster.optimizers.blockdiagonalBMD import _Y
+
+from .context import blockdiagonalBMD
+
+# from bmdcluster.optimizers.blockdiagonalBMD import run_bd_BMD
+# from bmdcluster.optimizers.blockdiagonalBMD import _bd_updateB
+# from bmdcluster.optimizers.blockdiagonalBMD import _bd_updateA
+# from bmdcluster.optimizers.blockdiagonalBMD import _d_ik
+# from bmdcluster.optimizers.blockdiagonalBMD import _Y
 
 
 class TestExampleDataset_BD(unittest.TestCase):
@@ -52,7 +55,7 @@ class TestExampleDataset_BD(unittest.TestCase):
 
     def test_run_bd_BMD(self):
         
-        _, A, B = run_bd_BMD(self.A, self.W, verbose = False)
+        _, A, B = blockdiagonalBMD.run_bd_BMD(self.A, self.W, verbose = False)
         
         with self.subTest():
             self.assertTrue(np.array_equal(A, self.expected_A))
@@ -65,15 +68,15 @@ class TestExampleDataset_BD(unittest.TestCase):
     def test_d_ik(self):
         for i in range(0, self.A.shape[0]):
             with self.subTest(i = i):
-                self.assertEqual(_d_ik(i, self.W, self.step_B), self.expected_assignment[i])
+                self.assertEqual(blockdiagonalBMD._d_ik(i, self.W, self.step_B), self.expected_assignment[i])
                 
 
     def test_bd_updateB(self):
-        self.assertTrue(np.array_equal(_bd_updateB(self.A, self.W), self.step_B))
+        self.assertTrue(np.array_equal(blockdiagonalBMD._bd_updateB(self.A, self.W), self.step_B))
             
 
     def test_bd_updateA(self):
-        self.assertTrue(np.array_equal(self.expected_A, _bd_updateA(self.A, self.step_B, self.W)))
+        self.assertTrue(np.array_equal(self.expected_A, blockdiagonalBMD._bd_updateA(self.A, self.step_B, self.W)))
 
     
 class IdentityTests_BD(unittest.TestCase):
@@ -83,15 +86,15 @@ class IdentityTests_BD(unittest.TestCase):
         
     
     def test_bd_updateB(self):
-        B = _bd_updateB(self.I, self.I)
+        B = blockdiagonalBMD._bd_updateB(self.I, self.I)
         self.assertTrue(np.array_equal(B, self.I))
         
 
     def test_Y(self):
-        self.assertTrue(np.array_equal(self.I, _Y(self.I, self.I)))
+        self.assertTrue(np.array_equal(self.I, blockdiagonalBMD._Y(self.I, self.I)))
         
     def test_bd_updateA(self):
-        A = _bd_updateA(self.I, self.I, self.I)
+        A = blockdiagonalBMD._bd_updateA(self.I, self.I, self.I)
         self.assertTrue(np.array_equal(self.I, A))
         
 

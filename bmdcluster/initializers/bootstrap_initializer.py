@@ -16,9 +16,13 @@ seed points for running the algorithm on the full dataset.
 
 import numpy as np
 
-from bmdcluster.initializers.cluster_initializers import initialize_A, initialize_B
-from bmdcluster.optimizers.blockdiagonalBMD import run_bd_BMD
-from bmdcluster.optimizers.generalBMD import run_BMD
+# from bmdcluster.initializers.cluster_initializers import initialize_A, initialize_B
+# from bmdcluster.optimizers.blockdiagonalBMD import run_bd_BMD
+# from bmdcluster.optimizers.generalBMD import run_BMD
+
+from initializers.cluster_initializers import initialize_A, initialize_B
+from optimizers.blockdiagonalBMD import run_bd_BMD
+from optimizers.generalBMD import run_BMD
 
 
 def bootstrap_data(N, b, seed=None):

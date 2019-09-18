@@ -1,9 +1,13 @@
 import numpy as np
 
-from bmdcluster.initializers.cluster_initializers import initialize_A, initialize_B
-from bmdcluster.initializers.bootstrap_initializer import initialize_bootstrapped_clusters_block_diagonal
-from bmdcluster.initializers.bootstrap_initializer import initialize_bootstrapped_clusters_general
+# from bmdcluster.initializers.cluster_initializers import initialize_A, initialize_B
+# from bmdcluster.initializers.bootstrap_initializer import initialize_bootstrapped_clusters_block_diagonal
+# from bmdcluster.initializers.bootstrap_initializer import initialize_bootstrapped_clusters_general
 
+
+from initializers.cluster_initializers import initialize_A, initialize_B
+from initializers.bootstrap_initializer import initialize_bootstrapped_clusters_block_diagonal
+from initializers.bootstrap_initializer import initialize_bootstrapped_clusters_general
 
 def initialize_block_diagonal(W, n_clusters, b=None, init_ratio=1.0, use_bootstrap=False, seed=None):
     """Wrapper function for cluster initialization functions and methods to initialize 

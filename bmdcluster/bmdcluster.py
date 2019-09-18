@@ -4,11 +4,16 @@ This file contains the main wrapper class for using the bmdcluster package.
 import warnings
 import numpy as np
 
-from bmdcluster.optimizers.blockdiagonalBMD import run_bd_BMD
-from bmdcluster.optimizers.generalBMD import run_BMD
-from bmdcluster.initializers.primary_initializer import initialize_general
-from bmdcluster.initializers.primary_initializer import initialize_block_diagonal
+# from bmdcluster.optimizers.blockdiagonalBMD import run_bd_BMD
+# from bmdcluster.optimizers.generalBMD import run_BMD
+# from bmdcluster.initializers.primary_initializer import initialize_general
+# from bmdcluster.initializers.primary_initializer import initialize_block_diagonal
 
+
+from optimizers.blockdiagonalBMD import run_bd_BMD
+from optimizers.generalBMD import run_BMD
+from initializers.primary_initializer import initialize_general
+from initializers.primary_initializer import initialize_block_diagonal
 
 
 class _BMD:
