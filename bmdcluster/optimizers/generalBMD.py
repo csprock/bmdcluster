@@ -183,29 +183,6 @@ def _updateA(A,B,X,W):
     return A_new
 
 
-################ update B given A, X ##################
-
-#def S_matrix(indices, W, X):
-#    j, c = indices
-#    
-#    n = W.shape[0]
-#    k = X.shape[0]
-#    
-#    wj = W[:,j]
-#    wj.shape = (wj.shape[0], 1)
-#    w_temp = np.tile(wj, (1, k))
-#    
-#    xc = X[:,c]
-#    x_temp = np.tile(xc, (n,1))
-#    
-#    S = w_temp - x_temp
-#    return np.square(S)
-#    
-#def r_jc(indices, W,X,A):
-#    S = S_matrix(indices, W,X)
-#    return np.trace(np.dot(A.T, S))   
-
-
 def _r_jc(indices, W, X, A):
     """ The feature cluster indicator matrix B is updated according to Formula 7 in Li (2005), which 
     uses an 'affiliation score' of the same form as that used to update A. The feature is assigned
@@ -272,15 +249,13 @@ def _updateB(A,B,X,W):
         new feature cluster assignment matrix B
     """
 
-    
     m, C = B.shape
     B_new = np.zeros((m,C))
-    
+
     for j in range(m):                   # iteration over rows (features)
         for c in range(C):               # iterate over columns (clusters)
             B_new[j,c] = _r_jc((j,c), W,X,A)
             
-    print(B_new)
     # Compute cluster assignments by taking argmin of each row. 
     cluster_assignments = B_new.argmin(axis = 1)
     # find outliers
@@ -346,9 +321,6 @@ def run_BMD(A,B,W, max_iter=100, verbose = 1):
     return O_new, A, B
 
 
-
-# def get_indices(A, j):
-#     return np.where(A[:,j] == 1)
 
 # deprecated implementations of updateA and updateB
 ############ computing A given X, B #############

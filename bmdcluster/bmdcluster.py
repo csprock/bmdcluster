@@ -94,7 +94,7 @@ class blockdiagonalBMD(_BMD):
 
 
     def get_feature_labels(self):
-        """Get feature cluster labels after .fit()
+        """Get feature cluster labels after .fit(). Outliers will be labeled -1.
         
         Returns
         -------
@@ -105,7 +105,7 @@ class blockdiagonalBMD(_BMD):
 
     
     def get_data_labels(self):
-        """Get data cluster labels after .fit()
+        """Get data cluster labels after .fit(). Outliers will be labeled -1.
         
         Returns
         -------
@@ -202,11 +202,13 @@ class generalBMD(_BMD):
             If :code:`use_bootstrap` is set to True but and :code:`b` is not specified
         ValueError
             If both :code:`B_ident` and :code:`f_clusters` are not specified
+        ValueError
+            If both :code:`B_ident=True` and :code:`f_clusters` is set
 
         Caution
         -------
-        If both :code:`B_ident=True` and :code:`f_clusters` is set, the program will
-        default to using :code:`B_ident`
+        Setting both :code:`B_ident=True` and :code:`f_clusters` are mutually exclusive options and will result in 
+        an error. 
 
         """
 
@@ -217,7 +219,7 @@ class generalBMD(_BMD):
             raise ValueError("You must one of either 'B_ident' or 'f_clusters'")
 
         if B_ident and f_clusters is not None:
-            warnings.warn("Both B_ident and f_clusters are set. Using B_ident.", UserWarning)
+            raise ValueError("Cannot set B_ident to True and set f_clusters")
 
         self.n_clusters = n_clusters
         self.B_ident = B_ident
@@ -258,7 +260,7 @@ class generalBMD(_BMD):
 
 
     def get_feature_labels(self):
-        """Get feature cluster labels after .fit()
+        """Get feature cluster labels after .fit(). Outliers will be labeled -1.
         
         Returns
         -------
@@ -269,7 +271,7 @@ class generalBMD(_BMD):
 
     
     def get_data_labels(self):
-        """Get data cluster labels after .fit()
+        """Get data cluster labels after .fit(). Outliers will be labeled -1.
         
         Returns
         -------
