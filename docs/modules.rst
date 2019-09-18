@@ -1,8 +1,14 @@
 API Reference
 =============
 
-bmdcluster
+blockdiagonalBMD
+----------------
+
+.. autoclass:: bmdcluster.bmdcluster.blockdiagonalBMD
+   :members:
+
+generalBMD
 ----------
 
-.. autoclass:: bmdcluster.bmdcluster.bmdcluster
+.. autoclass:: bmdcluster.bmdcluster.generalBMD
    :members:

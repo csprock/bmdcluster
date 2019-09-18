@@ -11,3 +11,9 @@ History
 ------------------
 
 * Released to PyPI with full documentation and continuous integration
+
+0.2.0 (2019-09-17)
+------------------
+
+* Fixed bugs in cluster initialization system. 
+* Refactored main user API into different classes for each clustering method

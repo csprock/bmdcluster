@@ -34,8 +34,7 @@ for clustering a binary matrix as presented by Li [1]_ and Li & Zhu [2]_. BMD so
 two-sided clustering problem of clustering both the data and the features.
 
 The algorithm works by decomposing a binary matrix :math:`W \in \mathbb{Z}^{n \times m}` with :math:`n` points and :math:`m` features into :math:`\hat{W}=AXB^T` 
-where :math:`A \in \mathbb{Z}^{n \times c}` and :math:`B \in \mathbb{Z}^{m \times k}` are cluster membership indicator matrices for the data and features 
-respectively for :math:`c` data clusters and :math:`k` feature clusters. :math:`X \in \mathbb{Z}^{c \times k}` is a cluster representation matrix that encodes the relationship 
+where :math:`A \in \mathbb{Z}^{n \times c}` and :math:`B \in \mathbb{Z}^{m \times k}` are cluster membership indicator matrices for the data and features with :math:`c` data clusters and :math:`k` feature clusters. :math:`X \in \mathbb{Z}^{c \times k}` is a cluster representation matrix that encodes the relationship 
 between the data and feature clusters. The algorithm alternatingly solves for these matrices by minimizing
 
 .. math::
