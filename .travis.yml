@@ -26,7 +26,7 @@ deploy:
   on:
     tags: true
     repo: csprock/bmdcluster
-    python: 3.6
+  skip_existing: true
 after_deploy:
   - make clean
   - "curl -X POST -d 'branches=$TRAVIS_BRANCH' -d 'token=$READTHEDOCS_TOKEN' \"https://readthedocs.org/api/v2/webhook/bmdcluster/97183/\""
