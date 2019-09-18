@@ -1,7 +1,7 @@
 """
 This file contains the main wrapper class for using the bmdcluster package.
 """
-
+import warnings
 import numpy as np
 
 from bmdcluster.optimizers.blockdiagonalBMD import run_bd_BMD
@@ -209,6 +209,9 @@ class generalBMD(_BMD):
 
         if not B_ident and not f_clusters:
             raise ValueError("You must one of either 'B_ident' or 'f_clusters'")
+
+        if B_ident and f_clusters is not None:
+            warnings.warn("Both B_ident and f_clusters are set. Using B_ident.", UserWarning)
 
         self.n_clusters = n_clusters
         self.B_ident = B_ident
