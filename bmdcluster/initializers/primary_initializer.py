@@ -1,10 +1,5 @@
 import numpy as np
 
-# from bmdcluster.initializers.cluster_initializers import initialize_A, initialize_B
-# from bmdcluster.initializers.bootstrap_initializer import initialize_bootstrapped_clusters_block_diagonal
-# from bmdcluster.initializers.bootstrap_initializer import initialize_bootstrapped_clusters_general
-
-
 from initializers.cluster_initializers import initialize_A, initialize_B
 from initializers.bootstrap_initializer import initialize_bootstrapped_clusters_block_diagonal
 from initializers.bootstrap_initializer import initialize_bootstrapped_clusters_general
