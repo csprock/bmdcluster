@@ -5,7 +5,6 @@
 
 from setuptools import setup, find_packages
 
-import bmdcluster
 
 readme = """
 A Python implementation of the Binary Matrix Decomposition algorithm for clustering binary data.
@@ -52,6 +51,6 @@ setup(
     test_suite='tests',
     tests_require=test_requirements,
     url='https://github.com/csprock/bmdcluster',
-    version=bmdcluster.__version__,
+    version='0.2.1',
     zip_safe=False,
 )
