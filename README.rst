@@ -22,9 +22,6 @@ A Python implementation of the Binary Matrix Decomposition algorithm for cluster
 * Documentation: https://bmdcluster.readthedocs.io.
 * GitHub: https://github.com/csprock/bmdcluster
 
-.. warning::
-   :code:`bmdcluster` is currently experimental, and as such the API and functionality are subject to frequent changes. If you decide to use
-   it, please check for updates frequently.
 
 bmdcluster
 ----------
