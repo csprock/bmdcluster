@@ -17,3 +17,9 @@ History
 
 * Fixed bugs in cluster initialization system. 
 * Refactored main user API into different classes for each clustering method
+* Deleted from PyPI on 2019-09-18
+
+0.2.1 (2019-09-18)
+------------------
+
+* Fixed submodule building and importation bugs
