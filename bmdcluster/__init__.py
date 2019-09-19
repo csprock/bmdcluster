@@ -258,7 +258,7 @@ class generalBMD(_BMD):
                                              seed=self.seed,
                                              f_clusters=self.f_clusters)
 
-        self.cost, self.A, self.B = run_BMD(self.A, self.B, self.W, self.max_iter, verbose)
+        self.cost, self.A, self.B, self.X = run_BMD(self.A, self.B, self.W, self.max_iter, verbose)
 
 
     def get_feature_labels(self):

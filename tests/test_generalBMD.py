@@ -47,7 +47,7 @@ class TestExampleDataset_General(unittest.TestCase):
 
     def test_run_BMD(self):
 
-        _, A, B = generalBMD.run_BMD(self.A, self.B, self.W, verbose = 0)
+        _, A, B, _ = generalBMD.run_BMD(self.A, self.B, self.W, verbose = 0)
 
         with self.subTest():
             self.assertTrue(np.array_equal(A, self.expected_AB))

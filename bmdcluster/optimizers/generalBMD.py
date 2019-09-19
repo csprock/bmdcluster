@@ -318,7 +318,7 @@ def run_BMD(A,B,W, max_iter=100, verbose = 1):
     if verbose:
         print("Convergence reached after {0} iterations".format(n_iter))
         
-    return O_new, A, B
+    return O_new, A, B, X
 
 
 

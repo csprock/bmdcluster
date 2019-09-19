@@ -156,7 +156,7 @@ def initialize_bootstrapped_clusters_general(W, n_clusters, f_clusters, B_ident,
     x_samp, x_rep = bootstrap_data(n, b=b, seed=seed)
     A_init = initialize_A(n=n, n_clusters=n_clusters, seed=seed)
     B_init = initialize_B(m=m, B_ident=B_ident, f_clusters=f_clusters, seed=seed)
-    _, A_boot, _ = run_BMD(A_init, B_init, W[x_rep,:], verbose=0)
+    _, A_boot, _, _ = run_BMD(A_init, B_init, W[x_rep,:], verbose=0)
 
     seed_points = assign_bootstrapped_clusters(A_boot, x_rep, x_samp)
 
