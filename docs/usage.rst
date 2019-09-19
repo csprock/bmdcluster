@@ -14,7 +14,7 @@ with.
 
 .. code:: python
 
-  from bmdcluster.bmdcluster import blockdiagonalBMD
+  from bmdcluster import blockdiagonalBMD
 
 Next we create some sample block diagonal data.
 
@@ -87,7 +87,7 @@ initialize each feature to be in its own cluster by setting :code:`B_ident=True`
 
 .. code:: python
 
-  from bmdcluster.bmdcluster import generalBMD
+  from bmdcluster import generalBMD
 
 Next we recreate the same sample data as above, except this time we'll augment
 it by giving the first block of points. The data matrix will look like a
