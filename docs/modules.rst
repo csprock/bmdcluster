@@ -4,11 +4,11 @@ API Reference
 blockdiagonalBMD
 ----------------
 
-.. autoclass:: bmdcluster.bmdcluster.blockdiagonalBMD
+.. autoclass:: bmdcluster.blockdiagonalBMD
    :members:
 
 generalBMD
 ----------
 
-.. autoclass:: bmdcluster.bmdcluster.generalBMD
+.. autoclass:: bmdcluster.generalBMD
    :members:
