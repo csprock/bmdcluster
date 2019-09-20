@@ -1,6 +1,6 @@
 __author__ = "Carson Sprock"
 __email__ = "csprock@gmail.com"
-__version__ = "0.2.2"
+__version__ = "0.3.0"
 
 
 import warnings
@@ -10,7 +10,8 @@ from bmdcluster.optimizers.blockdiagonalBMD import run_bd_BMD
 from bmdcluster.optimizers.generalBMD import run_BMD
 from bmdcluster.initializers.primary_initializer import initialize_general
 from bmdcluster.initializers.primary_initializer import initialize_block_diagonal
-
+from bmdcluster.optimizers.generalBMD import _updateA
+from bmdcluster.optimizers.blockdiagonalBMD import _bd_updateA
 
 class _BMD:
 
@@ -93,6 +94,50 @@ class blockdiagonalBMD(_BMD):
                                              seed=self.seed)
 
         self.cost, self.A, self.B = run_bd_BMD(self.A, self.W, self.max_iter, verbose)
+
+
+    def predict(self, W):
+        """Predict cluster labels of new data. 
+        
+        Parameters
+        ----------
+        W : np.array
+            binary data matrix
+        
+        Returns
+        -------
+        np.array
+            predicted cluster labels
+        """
+        
+        n = W.shape[0]
+        A_dummy = np.zeros((n, self.n_clusters))
+
+        A_pred = _bd_updateA(A_dummy, self.B, W)
+
+        return self._get_labels(A_pred)
+
+
+    def transform(self, W):
+        """Predict cluster assignment matrx of new data
+        
+        Parameters
+        ----------
+        W : np.array
+            binary data matrix
+        
+        Returns
+        -------
+        np.array
+            predicted cluster assignment matrix
+        """
+        
+        n = W.shape[0]
+        A_dummy = np.zeros((n, self.n_clusters))
+
+        A_pred = _bd_updateA(A_dummy, self.B, W)
+
+        return A_pred
 
 
     def get_feature_labels(self):
@@ -258,7 +303,51 @@ class generalBMD(_BMD):
                                              seed=self.seed,
                                              f_clusters=self.f_clusters)
 
-        self.cost, self.A, self.B = run_BMD(self.A, self.B, self.W, self.max_iter, verbose)
+        self.cost, self.A, self.B, self.X = run_BMD(self.A, self.B, self.W, self.max_iter, verbose)
+
+
+    def predict(self, W):
+        """Predict cluster labels of new data. 
+        
+        Parameters
+        ----------
+        W : np.array
+            binary data matrix
+        
+        Returns
+        -------
+        np.array
+            predicted cluster labels
+        """
+
+        n = W.shape[0]
+        A_dummy = np.zeros((n, self.n_clusters))
+
+        A_pred = _updateA(A_dummy, self.B, self.X, W)
+
+        return self._get_labels(A_pred)
+
+
+    def transform(self, W):
+        """Predict cluster assignment matrx of new data
+        
+        Parameters
+        ----------
+        W : np.array
+            binary data matrix
+        
+        Returns
+        -------
+        np.array
+            predicted cluster assignment matrix
+        """
+        
+        n = W.shape[0]
+        A_dummy = np.zeros((n, self.n_clusters))
+
+        A_pred = _updateA(A_dummy, self.B, self.X, W)
+
+        return A_pred
 
 
     def get_feature_labels(self):

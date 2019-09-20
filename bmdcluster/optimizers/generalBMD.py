@@ -225,7 +225,7 @@ def _r_jc(indices, W, X, A):
         
     return r_jc
 
-    
+
 def _updateB(A,B,X,W):
     """Updates the matrix B by creating a matrix M of identical dimensions whose elements are 'affiliation scores'.
     For each row, a 1 is placed in the position of the smallest entry and the rest set to 0's. In the case
@@ -318,7 +318,7 @@ def run_BMD(A,B,W, max_iter=100, verbose = 1):
     if verbose:
         print("Convergence reached after {0} iterations".format(n_iter))
         
-    return O_new, A, B
+    return O_new, A, B, X
 
 
 
