@@ -34,7 +34,7 @@ History
 
 * Added the ability to predict the cluster label of unseen data; encapsulated in .predict and .transform
 
-0.3.0 (2019-09-22)
+0.3.1 (2019-09-22)
 ------------------
 
 * Fixed confusing message output in verbose mode
